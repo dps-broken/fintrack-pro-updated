@@ -14,7 +14,7 @@ const TARGET_TIMEZONE = "Asia/Kolkata"; // Define your target timezone
 const scheduleDailyReport = () => {
   // Cron expression: 'minute hour day-of-month month day-of-week'
   // e.g., '13 0 * * *' for 12:13 AM in TARGET_TIMEZONE
-  cron.schedule('39 0 * * *', asyncHandler(async () => {
+  cron.schedule('47 0 * * *', asyncHandler(async () => {
     const jobRunTimeMoment = moment.tz(TARGET_TIMEZONE); // Current time in target timezone when job starts
     console.log(`[CRON START] Daily report job initiated at: ${jobRunTimeMoment.format('YYYY-MM-DD HH:mm:ss Z')} (${TARGET_TIMEZONE})`.cyan);
 
@@ -23,8 +23,21 @@ const scheduleDailyReport = () => {
 
     // Define the start and end of "yesterday" in TARGET_TIMEZONE
     // These moments will then be converted to JS Date objects (which are UTC-based) for Mongoose
-    const startDate = yesterdayMoment.clone().startOf('day').toDate(); // 00:00:00 of yesterday in TARGET_TIMEZONE, converted to UTC Date
-    const endDate = yesterdayMoment.clone().endOf('day').toDate();     // 23:59:59.999 of yesterday in TARGET_TIMEZONE, converted to UTC Date
+    // const startDate = yesterdayMoment.clone().startOf('day').toDate(); // 00:00:00 of yesterday in TARGET_TIMEZONE, converted to UTC Date
+    // const endDate = yesterdayMoment.clone().endOf('day').toDate();     // 23:59:59.999 of yesterday in TARGET_TIMEZONE, converted to UTC Date
+
+
+
+    // OLD
+// const startDate = yesterdayMoment.clone().startOf('day').toDate();
+// const endDate = yesterdayMoment.clone().endOf('day').toDate();
+
+// NEW
+const startDate = moment.tz(yesterdayMoment.format('YYYY-MM-DD'), TARGET_TIMEZONE).startOf('day').utc().toDate();
+const endDate = moment.tz(yesterdayMoment.format('YYYY-MM-DD'), TARGET_TIMEZONE).endOf('day').utc().toDate();
+
+
+
 
     console.log(`[CRON DATE CALC] Reporting for date (in ${TARGET_TIMEZONE}): ${yesterdayMoment.format('YYYY-MM-DD')}`.magenta);
     console.log(`[CRON DATE CALC] Query Start (UTC for DB): ${startDate.toISOString()}`.magenta);
