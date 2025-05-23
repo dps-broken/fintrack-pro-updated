@@ -5,20 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Expense Report</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: 20px auto; }
-        h2 { color: #2c3e50; }
-        ul { list-style-type: none; padding-left: 0; }
-        li { margin-bottom: 5px; }
-        strong { color: #3498db; }
-        .footer { font-size: 0.9em; color: #7f8c8d; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f8fb;
+            margin: 0;
+            padding: 20px;
+            color: #2d3436;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 100px;
+            height: auto;
+        }
+        h2 {
+            color: #218c74;
+            font-size: 22px;
+            border-bottom: 2px solid #dff9fb;
+            padding-bottom: 10px;
+        }
+        p {
+            font-size: 15px;
+            margin: 10px 0;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        li {
+            background-color: #eef9f2;
+            border-left: 4px solid #27ae60;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+        }
+        strong {
+            color: #e17055;
+        }
+        a {
+            color: #0984e3;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            font-size: 0.85em;
+            color: #636e72;
+            margin-top: 30px;
+            border-top: 1px solid #dfe6e9;
+            padding-top: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo">
+            <img src="../../client/src/assets/images/fintrack-logo.png" alt="FinTrack Pro Logo">
+        </div>
         <h2>Daily Expense Report - {{date}}</h2>
-        <p>Hi {{userName}},</p>
+        <p>Hi <strong>{{userName}}</strong>,</p>
         <p>Today, you spent a total of <strong>₹{{totalSpentToday}}</strong>.</p>
+
         {{#if expensesByCategory.length}}
         <p>Here's a breakdown by category:</p>
         <ul>
@@ -29,7 +88,9 @@
         {{else}}
         <p>No expenses were logged today.</p>
         {{/if}}
-        <p>Track more at <a href="https://fintrack-pro-updated.vercel.app/dashboard">FinTrack Pro</a>.</p>
+
+        <p>Track more at <a href="https://fintrack-pro-updated.vercel.app/dashboard" target="_blank">FinTrack Pro</a>.</p>
+
         <div class="footer">
             If you wish to stop receiving these daily reports, you can update your preferences in your FinTrack Pro profile settings.
         </div>
