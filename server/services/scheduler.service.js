@@ -3,130 +3,112 @@ import cron from 'node-cron';
 import asyncHandler from 'express-async-handler';
 import User from '../models/User.model.js';
 import Transaction from '../models/Transaction.model.js';
-import Category from '../models/Category.model.js'; // Used for $lookup
+import Category from '../models/Category.model.js';
 import { sendDailyExpenseReport, sendMonthlyOverviewReport } from './email.service.js';
-// import { getDateRange } from '../controllers/analytics.controller.js'; // Not strictly needed for fixed "yesterday" logic here
+import moment from 'moment-timezone'; // Import moment-timezone
 import colors from 'colors';
 
-// --- Daily Expense Report Job (Runs daily, e.g., at 12:13 AM server time for previous day's report) ---
+const TARGET_TIMEZONE = "Asia/Kolkata"; // Define your target timezone
+
+// --- Daily Expense Report Job ---
 const scheduleDailyReport = () => {
   // Cron expression: 'minute hour day-of-month month day-of-week'
-  // '13 0 * * *' means: at 13th minute past midnight (12:13 AM)
-  cron.schedule('21 0 * * *', asyncHandler(async () => {
-    console.log('Running daily expense report job for YESTERDAY\'s expenses...'.cyan);
+  // e.g., '13 0 * * *' for 12:13 AM in TARGET_TIMEZONE
+  cron.schedule('35 0 * * *', asyncHandler(async () => {
+    const jobRunTimeMoment = moment.tz(TARGET_TIMEZONE); // Current time in target timezone when job starts
+    console.log(`[CRON START] Daily report job initiated at: ${jobRunTimeMoment.format('YYYY-MM-DD HH:mm:ss Z')} (${TARGET_TIMEZONE})`.cyan);
 
-    // Determine the date for "yesterday"
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1); // Set date to one day before the current date
+    // Determine "yesterday" in the TARGET_TIMEZONE
+    const yesterdayMoment = jobRunTimeMoment.clone().subtract(1, 'day');
 
-    // Define the start and end of "yesterday"
-    const startDate = new Date(yesterday);
-    startDate.setHours(0, 0, 0, 0); // Beginning of yesterday
+    // Define the start and end of "yesterday" in TARGET_TIMEZONE
+    // These moments will then be converted to JS Date objects (which are UTC-based) for Mongoose
+    const startDate = yesterdayMoment.clone().startOf('day').toDate(); // 00:00:00 of yesterday in TARGET_TIMEZONE, converted to UTC Date
+    const endDate = yesterdayMoment.clone().endOf('day').toDate();     // 23:59:59.999 of yesterday in TARGET_TIMEZONE, converted to UTC Date
 
-    const endDate = new Date(yesterday);
-    endDate.setHours(23, 59, 59, 999); // End of yesterday
-
-    console.log(`Fetching daily expenses for date range: ${startDate.toISOString()} to ${endDate.toISOString()}`.gray);
+    console.log(`[CRON DATE CALC] Reporting for date (in ${TARGET_TIMEZONE}): ${yesterdayMoment.format('YYYY-MM-DD')}`.magenta);
+    console.log(`[CRON DATE CALC] Query Start (UTC for DB): ${startDate.toISOString()}`.magenta);
+    console.log(`[CRON DATE CALC] Query End (UTC for DB): ${endDate.toISOString()}`.magenta);
 
     const users = await User.find({ 'emailPreferences.dailyReport': true, email: { $ne: null } });
+    console.log(`[CRON INFO] Found ${users.length} users for daily report.`.gray);
 
     for (const user of users) {
+      console.log(`[CRON USER] Processing user: ${user.email}`.blue);
       try {
         const expensesForYesterday = await Transaction.aggregate([
           {
             $match: {
               user: user._id,
               type: 'expense',
-              date: { $gte: startDate, $lte: endDate } // Query for transactions within yesterday's range
+              date: { $gte: startDate, $lte: endDate } // Mongoose will handle these UTC dates correctly against its stored UTC dates
             }
           },
-          {
-            $group: {
-              _id: '$category',
-              totalSpent: { $sum: '$amount' }
-            }
-          },
-          {
-            $lookup: {
-              from: 'categories', // The actual name of your categories collection in MongoDB
-              localField: '_id',
-              foreignField: '_id',
-              as: 'categoryDetails'
-            }
-          },
-          {
-            // $unwind to deconstruct the categoryDetails array.
-            // preserveNullAndEmptyArrays: true ensures that if a category ID in a transaction
-            // doesn't match any category (e.g., category was deleted), the transaction isn't lost.
-            $unwind: { path: '$categoryDetails', preserveNullAndEmptyArrays: true }
-          },
-          {
-            $project: {
-              _id: 0, // Exclude the original _id (which is category ObjectId)
-              categoryName: { $ifNull: ['$categoryDetails.name', 'Uncategorized'] }, // Handle if categoryDetails is null
-              totalSpent: 1
-            }
-          },
+          { $group: { _id: '$category', totalSpent: { $sum: '$amount' }}},
+          { $lookup: { from: 'categories', localField: '_id', foreignField: '_id', as: 'categoryDetails' }},
+          { $unwind: { path: '$categoryDetails', preserveNullAndEmptyArrays: true }},
+          { $project: { _id: 0, categoryName: { $ifNull: ['$categoryDetails.name', 'Uncategorized'] }, totalSpent: 1 }},
           { $sort: { totalSpent: -1 } }
         ]);
 
         const totalSpentForReportDate = expensesForYesterday.reduce((sum, item) => sum + item.totalSpent, 0);
-
+        
         const reportData = {
-          totalSpentToday: totalSpentForReportDate, // Variable name in email template might say "Today"
+          totalSpentToday: totalSpentForReportDate,
           expensesByCategory: expensesForYesterday,
-          date: yesterday.toISOString(), // Pass the actual date the report is for
+          date: yesterdayMoment.toDate().toISOString(), // Date the report is *for*, in ISO string (UTC)
         };
+        
+        console.log(`[CRON USER REPORT DATA for ${user.email}] Date for report: ${new Date(reportData.date).toLocaleDateString('en-IN', {timeZone: TARGET_TIMEZONE})}, Total Spent: ${reportData.totalSpentToday}`.yellow);
 
         if (user.email) {
-            await sendDailyExpenseReport(user, reportData); // This function expects 'totalSpentToday'
-            console.log(`Daily report sent to ${user.email} for expenses of ${yesterday.toLocaleDateString()}`.green);
+            await sendDailyExpenseReport(user, reportData);
+            console.log(`Daily report sent to ${user.email} for expenses of ${yesterdayMoment.format('YYYY-MM-DD')}`.green);
         } else {
             console.warn(`User ${user._id} has daily reports enabled but no email address.`.yellow);
         }
 
       } catch (error) {
-        console.error(`Failed to generate or send daily report to ${user.email} for ${yesterday.toLocaleDateString()}: ${error.message}`.red);
+        console.error(`Failed to generate or send daily report to ${user.email} for ${yesterdayMoment.format('YYYY-MM-DD')}: ${error.message}`.red);
         console.error(error.stack);
       }
     }
-    console.log('Daily expense report job finished.'.cyan);
+    console.log('[CRON END] Daily expense report job finished.'.cyan);
   }), {
     scheduled: true,
-    timezone: "Asia/Kolkata" // IMPORTANT: Set to your target user's timezone.
-                             // This ensures 12:13 AM is 12:13 AM in Kolkata.
+    timezone: TARGET_TIMEZONE // node-cron uses this to determine *when* to trigger the job based on this timezone
   });
 };
 
 
-// --- Monthly Overview Report Job (Runs on the 1st of each month at 9 AM server time) ---
+// --- Monthly Overview Report Job ---
 const scheduleMonthlyReport = () => {
-  cron.schedule('0 9 1 * *', asyncHandler(async () => { // 9:00 AM on the 1st day of the month
-    console.log('Running monthly overview report job for PREVIOUS month...'.cyan);
+  cron.schedule('0 9 1 * *', asyncHandler(async () => { // 9:00 AM on 1st of month in TARGET_TIMEZONE
+    const jobRunTimeMoment = moment.tz(TARGET_TIMEZONE);
+    console.log(`[CRON START] Monthly overview job initiated at: ${jobRunTimeMoment.format('YYYY-MM-DD HH:mm:ss Z')} (${TARGET_TIMEZONE})`.cyan);
 
-    const now = new Date(); // Date when the job runs (e.g., May 1st)
-    // We want the report for the *previous* month (e.g., April)
+    // Report for the *previous* month, calculated in TARGET_TIMEZONE
+    const prevMonthMoment = jobRunTimeMoment.clone().subtract(1, 'month');
 
-    const prevMonthEndDate = new Date(now.getFullYear(), now.getMonth(), 0); // Last day of previous month
-    prevMonthEndDate.setHours(23, 59, 59, 999);
+    const prevMonthStartDate = prevMonthMoment.clone().startOf('month').toDate();
+    const prevMonthEndDate = prevMonthMoment.clone().endOf('month').toDate();
 
-    const prevMonthStartDate = new Date(now.getFullYear(), now.getMonth() - 1, 1); // First day of previous month
-    prevMonthStartDate.setHours(0, 0, 0, 0);
+    const monthName = prevMonthMoment.format('MMMM');
+    const year = prevMonthMoment.format('YYYY');
 
-    const monthName = prevMonthStartDate.toLocaleString('default', { month: 'long' });
-    const year = prevMonthStartDate.getFullYear();
-
-    console.log(`Fetching monthly overview for date range: ${prevMonthStartDate.toISOString()} to ${prevMonthEndDate.toISOString()}`.gray);
-
+    console.log(`[CRON DATE CALC] Reporting for month: ${monthName} ${year}`.magenta);
+    console.log(`[CRON DATE CALC] Query Start (UTC for DB): ${prevMonthStartDate.toISOString()}`.magenta);
+    console.log(`[CRON DATE CALC] Query End (UTC for DB): ${prevMonthEndDate.toISOString()}`.magenta);
 
     const users = await User.find({ 'emailPreferences.monthlyReport': true, email: { $ne: null } });
-
+    // ... (rest of the monthly report logic, using prevMonthStartDate and prevMonthEndDate for queries)
     for (const user of users) {
       try {
         const incomePromise = Transaction.aggregate([
           { $match: { user: user._id, type: 'income', date: { $gte: prevMonthStartDate, $lte: prevMonthEndDate } } },
           { $group: { _id: null, total: { $sum: '$amount' } } }
         ]);
+        // ... (similar for expensePromise, topSpendingPromise) ...
         const expensePromise = Transaction.aggregate([
           { $match: { user: user._id, type: 'expense', date: { $gte: prevMonthStartDate, $lte: prevMonthEndDate } } },
           { $group: { _id: null, total: { $sum: '$amount' } } }
@@ -182,20 +164,21 @@ const scheduleMonthlyReport = () => {
         console.error(error.stack);
       }
     }
-    console.log('Monthly overview report job finished.'.cyan);
+
+    console.log('[CRON END] Monthly overview report job finished.'.cyan);
   }), {
     scheduled: true,
-    timezone: "Asia/Kolkata"
+    timezone: TARGET_TIMEZONE
   });
 };
 
 
 // --- Initialize all schedulers ---
 export const initializeScheduler = () => {
-  if (process.env.NODE_ENV !== 'test') { // Don't run schedulers during tests
+  if (process.env.NODE_ENV !== 'test') {
     scheduleDailyReport();
     scheduleMonthlyReport();
-    console.log('Cron jobs initialized.'.magenta);
+    console.log(`Cron jobs initialized. Target timezone: ${TARGET_TIMEZONE}`.magenta);
   } else {
     console.log('Cron jobs skipped in test environment.'.gray);
   }
