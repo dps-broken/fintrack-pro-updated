@@ -9,10 +9,10 @@ import colors from 'colors'; // Ensure colors is imported
 const EMAIL_HOST_HARDCODED = "smtp.gmail.com";
 const EMAIL_PORT_HARDCODED = 587; // Use number, not string
 const EMAIL_SECURE_HARDCODED = false; // boolean: true for 465, false for 587 (TLS)
-const EMAIL_USER_HARDCODED = "dwivedipranjal1234567@gmail.com"; // Your actual email
-const EMAIL_PASS_HARDCODED = "sqzqjofmjpdgmljo"; // Your actual (App) Password
+const EMAIL_USER_HARDCODED = "services.fintrackpro@gmail.com"; // Your actual email
+const EMAIL_PASS_HARDCODED = "nwtnzdjgbxzzwsyo"; // Your actual (App) Password
 const EMAIL_FROM_NAME_HARDCODED = "FinTrack Pro";
-const EMAIL_FROM_ADDRESS_HARDCODED = "dwivedipranjal1234567@gmail.com"; // Can be same as user or a no-reply
+const EMAIL_FROM_ADDRESS_HARDCODED = "services.fintrackpro@gmail.com"; // Can be same as user or a no-reply
 // --- END HARDCODED EMAIL DETAILS ---
 
 // const EMAIL_HOST = process.env.EMAIL_HOST; // Original
