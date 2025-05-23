@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.server # If you named it differently
+    ports:
+      - "5001:5001"
+    environment:
+      NODE_ENV: development # or production
+      PORT: 5001
+      MONGO_URI: mongodb://mongo:27017/fintrack_pro # Connect to mongo service
+      JWT_SECRET: your_very_strong_jwt_secret_key_here
+      JWT_EXPIRES_IN: 7d
+      # Add other server env vars from your .env file
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_SECURE: ${EMAIL_SECURE}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+      CLIENT_URL: http://localhost:3000
+    volumes:
+      - ./server:/app # Mount local server code for development
+      - /app/node_modules # Don't mount local node_modules
+    depends_on:
+      - mongo
+    networks:
+      - fintrack_network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client # If you named it differently
+      args:
+        REACT_APP_API_URL: http://localhost:5001/api # Or http://server:5001/api if server is not exposed on localhost
+    ports:
+      - "3000:80" # Nginx in client container serves on port 80
+    volumes:
+      - ./client/src:/app/src # Mount local client src for development (only if not using a build stage for dev)
+    depends_on:
+      - server
+    networks:
+      - fintrack_network
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - fintrack_network
+
+volumes:
+  mongo-data:
+
+networks:
+  fintrack_network:
+    driver: bridge

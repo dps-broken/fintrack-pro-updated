@@ -1,0 +1,61 @@
+/* client/src/styles/theme.css */
+
+/* Import this file in your src/index.js before other styles that might use these variables,
+   or ensure Tailwind's config reads these. For Tailwind, it's often better to define these
+   in the :root and .dark selectors within your main CSS file (e.g., index.css)
+   that Tailwind processes, or directly in tailwind.config.js. */
+
+:root {
+  /* Light Theme Colors */
+  --color-primary: 29 161 242; /* Twitter Blue example - RGB values */
+  --color-secondary: 26 190 116; /* Green example */
+  --color-background: 244 247 246; /* #f4f7f6 */
+  --color-card: 255 255 255;     /* #ffffff */
+  --color-text: 52 73 94;       /* #34495e */
+  --color-text-muted: 127 140 141; /* #7f8c8d */
+  --color-border: 222 226 230;    /* #dee2e6 */
+
+  --primary-light: theme('colors.blue.500'); /* Using Tailwind's color palette directly if preferred */
+  --secondary-light: theme('colors.green.500');
+  --background-light: theme('colors.slate.100');
+  --card-light: theme('colors.white');
+  --text-light: theme('colors.slate.700');
+  --text-muted-light: theme('colors.slate.500');
+}
+
+.dark {
+  /* Dark Theme Colors */
+  --color-primary: 56 189 248;   /* Lighter Blue */
+  --color-secondary: 74 222 128;  /* Lighter Green */
+  --color-background: 30 41 59;    /* #1e293b - slate-800 */
+  --color-card: 51 65 85;        /* #334155 - slate-700 */
+  --color-text: 226 232 240;     /* #e2e8f0 - slate-200 */
+  --color-text-muted: 148 163 184;/* #94a3b8 - slate-400 */
+  --color-border: 71 85 105;      /* #475569 - slate-600 */
+
+  --primary-dark: theme('colors.sky.500');
+  --secondary-dark: theme('colors.emerald.500');
+  --background-dark: theme('colors.slate.800');
+  --card-dark: theme('colors.slate.700');
+  --text-dark: theme('colors.slate.200');
+  --text-muted-dark: theme('colors.slate.400');
+}
+
+/* You can then use these in Tailwind config or other CSS: */
+/* Example in tailwind.config.js:
+  theme: {
+    extend: {
+      colors: {
+        primary: 'rgb(var(--color-primary) / <alpha-value>)', // For opacity support
+        // ... other theme colors
+      }
+    }
+  }
+*/
+
+/* Or in another CSS file:
+  .my-component {
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-text));
+  }
+*/

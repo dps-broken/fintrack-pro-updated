@@ -1,0 +1,119 @@
+/* Import Tailwind base, components, and utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles */
+body {
+  @apply bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark transition-colors duration-300 ease-in-out;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar (optional, for aesthetics) */
+/* For Webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-background-light dark:bg-gray-700 rounded-lg;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 dark:bg-gray-500 rounded-lg;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500 dark:bg-gray-400;
+}
+
+
+/* Chart.js tooltip custom styling (example) */
+.chartjs-tooltip {
+  @apply bg-card-light dark:bg-card-dark shadow-lg rounded-md p-2 text-xs opacity-90;
+  /* Add more specific styles if needed */
+}
+
+/* React Datepicker custom styling (if needed) */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+.react-datepicker__input-container input {
+  @apply w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark focus:ring-primary-light dark:focus:ring-primary-dark focus:border-primary-light dark:focus:border-primary-dark;
+}
+.react-datepicker {
+  @apply bg-card-light dark:bg-card-dark border-gray-300 dark:border-gray-700 shadow-lg;
+}
+.react-datepicker__header {
+  @apply bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600;
+}
+.react-datepicker__current-month, .react-datepicker-time__header, .react-datepicker-year-header {
+   @apply text-text-light dark:text-text-dark;
+}
+.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {
+  @apply text-text-light dark:text-text-dark;
+}
+.react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
+  @apply bg-primary-light dark:bg-primary-dark text-white dark:text-black;
+}
+.react-datepicker__day:hover {
+  @apply bg-gray-200 dark:bg-gray-600 rounded-full;
+}
+.react-datepicker__navigation-icon::before {
+    @apply border-gray-600 dark:border-gray-400;
+}
+
+
+/* Sonner Toasts (if using Sonner) */
+/* [data-sonner-toast][data-type="success"] {
+  @apply bg-green-500 border-green-600 text-white;
+}
+[data-sonner-toast][data-type="error"] {
+  @apply bg-red-500 border-red-600 text-white;
+} */
+
+/* Form input general styling (can be component-specific too) */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"], /* Basic date input styling, react-datepicker is preferred */
+textarea,
+select {
+  @apply block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm
+  bg-card-light dark:bg-card-dark
+  text-text-light dark:text-text-dark
+  placeholder-gray-400 dark:placeholder-gray-500
+  focus:outline-none focus:ring-primary-light dark:focus:ring-primary-dark focus:border-primary-light dark:focus:border-primary-dark
+  sm:text-sm;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Style for react-select */
+.react-select-container .react-select__control {
+  @apply bg-card-light dark:bg-card-dark border-gray-300 dark:border-gray-600 text-text-light dark:text-text-dark shadow-sm min-h-[38px];
+}
+.react-select-container .react-select__control--is-focused {
+  @apply border-primary-light dark:border-primary-dark ring-1 ring-primary-light dark:ring-primary-dark;
+  box-shadow: none !important;
+}
+.react-select-container .react-select__single-value {
+  @apply text-text-light dark:text-text-dark;
+}
+.react-select-container .react-select__menu {
+  @apply bg-card-light dark:bg-card-dark border border-gray-300 dark:border-gray-600 shadow-lg;
+}
+.react-select-container .react-select__option {
+  @apply text-text-light dark:text-text-dark;
+}
+.react-select-container .react-select__option--is-focused {
+  @apply bg-gray-100 dark:bg-gray-700;
+}
+.react-select-container .react-select__option--is-selected {
+  @apply bg-primary-light dark:bg-primary-dark text-white dark:text-card-light;
+}
+.react-select-container .react-select__input-container {
+    @apply text-text-light dark:text-text-dark;
+}
+
+/* Add any other global styles or overrides here */

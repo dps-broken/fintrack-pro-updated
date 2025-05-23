@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Alert</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .email-container { max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px; border: 1px solid #dddddd; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .header { background-color: #e74c3c; color: white; padding: 15px; text-align: center; border-top-left-radius: 7px; border-top-right-radius: 7px; }
+        .header h2 { margin: 0; font-size: 24px; }
+        .content { padding: 20px; }
+        .content p { margin-bottom: 15px; }
+        .highlight { color: #c0392b; font-weight: bold; }
+        .cta-button { display: inline-block; background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .footer { font-size: 0.9em; color: #7f8c8d; margin-top: 20px; border-top: 1px solid #eeeeee; padding-top: 15px; text-align: center; }
+        .footer a { color: #3498db; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h2>Budget Alert! ⚠️</h2>
+        </div>
+        <div class="content">
+            <p>Hi {{userName}},</p>
+            <p>This is an alert regarding your budget: <strong style="color: #2c3e50;">"{{budgetName}}"</strong>.</p>
+            <p>
+                You have spent <strong class="highlight">₹{{totalSpent}}</strong> of your allocated <strong>₹{{budgetAmount}}</strong>.
+                This is <strong class="highlight">{{percentage}}%</strong> of your budget for the current period (starting {{budgetStartDate}}).
+            </p>
+            {{#if isBreached}}
+            <p style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; border: 1px solid #f5c6cb;">
+                <strong>You have exceeded this budget.</strong>
+            </p>
+            {{/if}}
+            <p>Consider reviewing your spending to stay on track.</p>
+            <p style="text-align: center; margin-top: 25px;">
+                <a href="{{appUrl}}/budget" class="cta-button">Manage Your Budgets</a>
+            </p>
+        </div>
+        <div class="footer">
+            <p>
+                You can disable these alerts in your budget settings or <a href="{{appUrl}}/profile">profile preferences</a> on FinTrack Pro.
+            </p>
+            <p>© {{currentYear}} FinTrack Pro. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

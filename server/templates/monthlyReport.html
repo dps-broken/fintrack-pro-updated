@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Financial Overview</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .email-container { max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px; border: 1px solid #dddddd; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .header { background-color: #2980b9; color: white; padding: 20px; text-align: center; border-top-left-radius: 7px; border-top-right-radius: 7px; }
+        .header h2 { margin: 0; font-size: 24px; }
+        .content { padding: 20px; }
+        .content p, .content ul { margin-bottom: 15px; }
+        .summary-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .summary-table td { padding: 8px 0; border-bottom: 1px solid #eeeeee; }
+        .summary-table td:last-child { text-align: right; font-weight: bold; }
+        .positive { color: #27ae60; }
+        .negative { color: #c0392b; }
+        .section-title { font-size: 18px; color: #2c3e50; margin-top: 20px; margin-bottom: 10px; border-bottom: 2px solid #3498db; padding-bottom: 5px;}
+        .cta-button { display: inline-block; background-color: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .footer { font-size: 0.9em; color: #7f8c8d; margin-top: 20px; border-top: 1px solid #eeeeee; padding-top: 15px; text-align: center; }
+        .footer a { color: #3498db; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h2>Monthly Financial Overview</h2>
+        </div>
+        <div class="content">
+            <p>Hi {{userName}},</p>
+            <p>Here's your financial summary for <strong>{{monthName}} {{year}}</strong>:</p>
+
+            <table class="summary-table">
+                <tr>
+                    <td>Total Income:</td>
+                    <td class="positive">₹{{totalIncome}}</td>
+                </tr>
+                <tr>
+                    <td>Total Expenses:</td>
+                    <td class="negative">₹{{totalExpense}}</td>
+                </tr>
+                <tr>
+                    <td>Net Savings:</td>
+                    <td class="{{#if isNetSavingsPositive}}positive{{else}}negative{{/if}}">
+                        ₹{{netSavings}} ({{#if isNetSavingsPositive}}Saved{{else}}Overspent{{/if}})
+                    </td>
+                </tr>
+            </table>
+
+            {{#if topSpendingCategories.length}}
+            <p class="section-title">Top Spending Categories</p>
+            <ul>
+                {{#each topSpendingCategories}}
+                <li>{{this.categoryName}}: ₹{{this.totalSpent}}</li>
+                {{/each}}
+            </ul>
+            {{else}}
+            <p>No expenses were logged this month.</p>
+            {{/if}}
+
+            {{#if suggestions.length}}
+            <p class="section-title">Suggestions for Next Month</p>
+            <ul>
+                {{#each suggestions}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+            {{/if}}
+
+            <p style="text-align: center; margin-top: 25px;">
+                <a href="{{appUrl}}/dashboard" class="cta-button">View Full Dashboard</a>
+            </p>
+        </div>
+        <div class="footer">
+            <p>
+                To manage your email preferences, please visit your <a href="{{appUrl}}/profile">profile settings</a> on FinTrack Pro.
+            </p>
+            <p>© {{currentYear}} FinTrack Pro. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

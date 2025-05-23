@@ -1,0 +1,30 @@
+/* client/src/styles/global.css */
+
+/* Import this file in your src/index.js or src/App.js */
+
+/* Example: Custom font loading if not done in public/index.html */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); */
+
+/* Example: More specific global typography */
+/* body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply text-base; // From Tailwind
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold; // Example global heading style
+} */
+
+/* Add any other global base styles here */
+
+/* Example: Custom class for a specific, non-utility purpose */
+/* .custom-text-shadow {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+} */
+
+/* Styles for third-party libraries if not easily styled with Tailwind utilities */
+/* .some-library-class {
+  @apply p-4 bg-blue-100 border border-blue-300 rounded-md;
+} */
