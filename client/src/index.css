@@ -83,7 +83,7 @@ input[type="number"],
 input[type="date"], /* Basic date input styling, react-datepicker is preferred */
 textarea,
 select {
-  @apply block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm
+  @apply block w-full px-3 pl-10 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm
   bg-card-light dark:bg-card-dark
   text-text-light dark:text-text-dark
   placeholder-gray-400 dark:placeholder-gray-500
