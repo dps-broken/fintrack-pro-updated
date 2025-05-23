@@ -1,92 +1,59 @@
 // server/services/email.service.js
 import nodemailer from 'nodemailer';
 import asyncHandler from 'express-async-handler';
-import colors from 'colors'; // Ensure colors is imported
+import colors from 'colors';
 
-// --- HARDCODED EMAIL DETAILS - FOR DEBUGGING ONLY ---
-// --- REMOVE THESE AND USE process.env FOR PRODUCTION ---
-// --- Replace with your actual credentials for testing ---
-const EMAIL_HOST_HARDCODED = "smtp.gmail.com";
-const EMAIL_PORT_HARDCODED = 587; // Use number, not string
-const EMAIL_SECURE_HARDCODED = false; // boolean: true for 465, false for 587 (TLS)
-const EMAIL_USER_HARDCODED = "services.fintrackpro@gmail.com"; // Your actual email
-const EMAIL_PASS_HARDCODED = "nwtnzdjgbxzzwsyo"; // Your actual (App) Password
-const EMAIL_FROM_NAME_HARDCODED = "FinTrack Pro";
-const EMAIL_FROM_ADDRESS_HARDCODED = "services.fintrackpro@gmail.com"; // Can be same as user or a no-reply
-// --- END HARDCODED EMAIL DETAILS ---
-
-// const EMAIL_HOST = process.env.EMAIL_HOST; // Original
-// const EMAIL_PORT = parseInt(process.env.EMAIL_PORT || '587', 10); // Original
-// const EMAIL_SECURE = process.env.EMAIL_SECURE === 'true'; // Original
-// const EMAIL_USER = process.env.EMAIL_USER; // Original
-// const EMAIL_PASS = process.env.EMAIL_PASS; // Original
-// const EMAIL_FROM_NAME = process.env.EMAIL_FROM_NAME || 'FinTrack Pro'; // Original
-// const EMAIL_FROM_ADDRESS = process.env.EMAIL_FROM_ADDRESS || 'noreply@fintrackpro.com'; // Original
+// --- HARDCODED EMAIL DETAILS - DEBUGGING PURPOSE ONLY ---
+const EMAIL_HOST = "smtp.gmail.com";
+const EMAIL_PORT = 587;
+const EMAIL_SECURE = false;
+const EMAIL_USER = "services.fintrackpro@gmail.com";
+const EMAIL_PASS = "nwtnzdjgbxzzwsyo"; // Your Gmail App Password
+const EMAIL_FROM_NAME = "FinTrack Pro";
+const EMAIL_FROM_ADDRESS = "services.fintrackpro@gmail.com";
+// ---------------------------------------------------------
 
 let transporter;
 
-console.log("Email Service: Using HARDCODED email credentials for debugging.".magenta.bold);
-if (EMAIL_PASS_HARDCODED === "YOUR_ACTUAL_GMAIL_APP_PASSWORD_HERE") {
-    console.warn(
-        "\n*********************************************************************\n".yellow +
-        "WARNING: Placeholder EMAIL_PASS_HARDCODED in email.service.js!".yellow.bold +
-        "\nREPLACE IT WITH YOUR REAL (APP) PASSWORD FOR TESTING.".yellow.bold +
-        "\n*********************************************************************\n".yellow
-    );
-}
+console.log("Email Service: Using HARDCODED email credentials.".magenta.bold);
 
-
-// Check if the hardcoded essential variables are present
-if (EMAIL_HOST_HARDCODED && EMAIL_USER_HARDCODED && EMAIL_PASS_HARDCODED) {
+if (!EMAIL_HOST || !EMAIL_USER || !EMAIL_PASS) {
+  console.error("Missing HARDCODED email config values.".red.bold);
+  transporter = null;
+} else {
   try {
     transporter = nodemailer.createTransport({
-      host: EMAIL_HOST_HARDCODED,
-      port: EMAIL_PORT_HARDCODED,
-      secure: EMAIL_SECURE_HARDCODED,
+      host: EMAIL_HOST,
+      port: EMAIL_PORT,
+      secure: EMAIL_SECURE,
       auth: {
-        user: EMAIL_USER_HARDCODED,
-        pass: EMAIL_PASS_HARDCODED,
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
       },
-      tls: {
-          // Setting to false can help with some self-signed cert issues in dev,
-          // but for Gmail, it should generally not be needed.
-          // rejectUnauthorized: false // Use with extreme caution, not for production with Gmail
-      }
     });
 
-    // Verify connection configuration
-    // You can remove the verify call if it's causing issues during startup,
-    // but it's good for confirming transporter setup.
     transporter.verify((error, success) => {
       if (error) {
-          console.error('Error configuring email transporter (verify failed - hardcoded):'.red, error.message);
-          console.warn('Email services might still not be available even with hardcoded values.'.yellow);
-          transporter = null; // Ensure transporter is null if verify fails
+        console.error("Transporter verification failed:".red, error.message);
+        transporter = null;
       } else {
-          console.log('Email transporter configured successfully. Server is ready to send emails.'.green);
+        console.log("Email transporter is ready to send messages.".green);
       }
     });
-
-  } catch (initError) {
-      console.error('Error initializing Nodemailer transporter with hardcoded values:'.red, initError);
-      transporter = null; // Ensure transporter is null if createTransport fails
+  } catch (err) {
+    console.error("Transporter initialization error:".red, err.message);
+    transporter = null;
   }
-} else {
-  console.error('CRITICAL: One or more essential HARDCODED email variables (HOST, USER, PASS) are missing or empty. Email sending will be disabled.'.red.bold);
-  transporter = null; // Ensure transporter is null
 }
-
 
 const sendEmail = asyncHandler(async (options) => {
   if (!transporter) {
-    console.error('Email transporter not initialized (hardcoded check). Cannot send email.'.red);
-    // Optionally throw an error to make it more visible in the calling code
-    // throw new Error('Email service is not configured or transporter failed to initialize.');
-    return; // Silently fail or throw, depending on desired behavior
+    console.error("Transporter not initialized. Email not sent.".red);
+    return;
   }
 
   const mailOptions = {
-    from: `"${EMAIL_FROM_NAME_HARDCODED}" <${EMAIL_FROM_ADDRESS_HARDCODED}>`,
+    from: `"${EMAIL_FROM_NAME}" <${EMAIL_FROM_ADDRESS}>`,
     to: options.to,
     subject: options.subject,
     text: options.text,
@@ -95,39 +62,28 @@ const sendEmail = asyncHandler(async (options) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log(`Email sent (using hardcoded config): ${info.messageId}`.blue);
+    console.log(`Email sent: ${info.messageId}`.blue);
     return info;
   } catch (error) {
-    console.error(`Error sending email to ${options.to} (using hardcoded config):`.red, error.message);
-    console.error("Full Nodemailer send error:".red, error); // Log the full error object
-    throw error; // Re-throw so calling function knows it failed
+    console.error(`Email send failed to ${options.to}:`.red, error.message);
+    throw error;
   }
 });
 
-// --- Specific Email Templates/Functions (sendDailyExpenseReport, etc.) ---
-// These functions will now use the sendEmail function above, which uses hardcoded details.
-// No changes needed to the content of these functions themselves, only how sendEmail gets its config.
-
 export const sendDailyExpenseReport = asyncHandler(async (user, reportData) => {
   if (!user.emailPreferences.dailyReport || !user.email) {
-      console.log(`Skipping daily report for ${user.email}: user opted out or no email.`.gray);
-      return;
+    console.log(`Skipping daily report: ${user.email}`.gray);
+    return;
   }
 
-  // ... (rest of the function logic as before)
   const { totalSpentToday, expensesByCategory, date } = reportData;
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric'
   });
 
-  let categoryDetails = "";
-  if (expensesByCategory && expensesByCategory.length > 0) {
-    categoryDetails = expensesByCategory
-      .map(cat => `<li>${cat.categoryName || 'Uncategorized'}: ₹${cat.totalSpent.toFixed(2)}</li>`)
-      .join('');
-  } else {
-    categoryDetails = "<li>No expenses recorded today.</li>";
-  }
+  let categoryDetails = expensesByCategory && expensesByCategory.length > 0
+    ? expensesByCategory.map(cat => `<li>${cat.categoryName || 'Uncategorized'}: ₹${cat.totalSpent.toFixed(2)}</li>`).join('')
+    : "<li>No expenses recorded today.</li>";
 
   const subject = `Your Daily Expense Report – ₹${totalSpentToday.toFixed(2)} Spent Today (${formattedDate})`;
   const htmlBody = `
@@ -135,22 +91,16 @@ export const sendDailyExpenseReport = asyncHandler(async (user, reportData) => {
       <body style="font-family: Arial, sans-serif; line-height: 1.6;">
         <h2>Daily Expense Report - ${formattedDate}</h2>
         <p>Hi ${user.name || 'User'},</p>
-        <p>Today, you spent a total of <strong>₹${totalSpentToday.toFixed(2)}</strong>.</p>
-        ${expensesByCategory && expensesByCategory.length > 0 ? `
-        <p>Here's a breakdown by category:</p>
-        <ul>
-          ${categoryDetails}
-        </ul>` : '<p>No expenses were logged today. Keep up the good work if you were aiming for a zero-spend day!</p>'}
-        <p>Track more at <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/dashboard">FinTrack Pro</a>.</p>
+        <p>Today, you spent <strong>₹${totalSpentToday.toFixed(2)}</strong>.</p>
+        ${expensesByCategory.length > 0 ? `<ul>${categoryDetails}</ul>` : ''}
+        <p>Track more at <a href="http://localhost:3000/dashboard">FinTrack Pro</a>.</p>
         <hr>
-        <p><small>If you wish to stop receiving these daily reports, you can update your preferences in your FinTrack Pro profile settings.</small></p>
+        <p><small>To stop receiving daily reports, update your settings in FinTrack Pro.</small></p>
       </body>
     </html>
   `;
-  const textBody = `...`; // (Keep your text body)
+  const textBody = `You spent ₹${totalSpentToday.toFixed(2)} today. View details at FinTrack Pro.`;
 
-
-  console.log(`Attempting to send daily report to ${user.email} using hardcoded config...`.blue);
   await sendEmail({
     to: user.email,
     subject,
@@ -160,73 +110,94 @@ export const sendDailyExpenseReport = asyncHandler(async (user, reportData) => {
 });
 
 export const sendMonthlyOverviewReport = asyncHandler(async (user, reportData) => {
-    if (!user.emailPreferences.monthlyReport || !user.email) {
-        console.log(`Skipping monthly report for ${user.email}: user opted out or no email.`.gray);
-        return;
-    }
-    // ... (rest of the function logic as before) ...
-    const { monthName, year, totalIncome, totalExpense, netSavings, topSpendingCategories, suggestions } = reportData;
-    // ... (construct subject, htmlBody, textBody)
-    let categoryDetails = "";
-    if (topSpendingCategories && topSpendingCategories.length > 0) {
-      categoryDetails = topSpendingCategories
-        .map(cat => `<li>${cat.categoryName || 'Uncategorized'}: ₹${cat.totalSpent.toFixed(2)}</li>`)
-        .join('');
-    } else {
-      categoryDetails = "<li>No expenses recorded this month.</li>";
-    }
-    let suggestionsHtml = "";
-    if (suggestions && suggestions.length > 0) {
-      suggestionsHtml = `<p><strong>Suggestions for next month:</strong></p><ul>${suggestions.map(s => `<li>${s}</li>`).join('')}</ul>`;
-    }
-    const subject = `Your Monthly Financial Overview for ${monthName} ${year}`;
-    const htmlBody = `...`; // (Keep your HTML body)
+  if (!user.emailPreferences.monthlyReport || !user.email) {
+    console.log(`Skipping monthly report: ${user.email}`.gray);
+    return;
+  }
 
+  const { monthName, year, totalIncome, totalExpense, netSavings, topSpendingCategories, suggestions } = reportData;
 
-    console.log(`Attempting to send monthly overview to ${user.email} using hardcoded config...`.blue);
-    await sendEmail({
-        to: user.email,
-        subject,
-        html: htmlBody, // Add your full HTML
-        text: `Monthly Overview for ${monthName} ${year}...`
-    });
+  let categoryDetails = topSpendingCategories && topSpendingCategories.length > 0
+    ? topSpendingCategories.map(cat => `<li>${cat.categoryName || 'Uncategorized'}: ₹${cat.totalSpent.toFixed(2)}</li>`).join('')
+    : "<li>No spending data for this month.</li>";
+
+  let suggestionHtml = suggestions && suggestions.length > 0
+    ? `<ul>${suggestions.map(s => `<li>${s}</li>`).join('')}</ul>`
+    : '';
+
+  const subject = `Your Monthly Overview – ${monthName} ${year}`;
+  const htmlBody = `
+    <html>
+      <body>
+        <h2>${monthName} ${year} – Financial Overview</h2>
+        <p><strong>Total Income:</strong> ₹${totalIncome}</p>
+        <p><strong>Total Expenses:</strong> ₹${totalExpense}</p>
+        <p><strong>Net Savings:</strong> ₹${netSavings}</p>
+        <h3>Top Spending Categories:</h3>
+        <ul>${categoryDetails}</ul>
+        ${suggestionHtml}
+        <hr>
+        <p><small>To stop monthly overviews, change your email preferences.</small></p>
+      </body>
+    </html>
+  `;
+  const textBody = `Monthly Report: Income ₹${totalIncome}, Expenses ₹${totalExpense}, Savings ₹${netSavings}.`;
+
+  await sendEmail({
+    to: user.email,
+    subject,
+    text: textBody,
+    html: htmlBody,
+  });
 });
 
 export const sendBudgetBreachAlert = asyncHandler(async (user, budget, totalSpent, percentage) => {
-    if (!user.emailPreferences.budgetAlerts || !user.email || !budget.notificationsEnabled) {
-        console.log(`Skipping budget alert for ${user.email} on budget "${budget.name}": user/budget opted out or no email.`.gray);
-        return;
-    }
-    // ... (rest of the function logic as before) ...
-    const budgetName = budget.name || (budget.category ? budget.category.name + " Budget" : "Overall Budget");
-    const subject = `⚠️ Budget Alert: You've spent ${percentage}% of your ${budgetName}!`;
-    const htmlBody = `...`; // (Keep your HTML body)
+  if (!user.emailPreferences.budgetAlerts || !user.email || !budget.notificationsEnabled) {
+    console.log(`Skipping budget alert: ${user.email}`.gray);
+    return;
+  }
 
+  const budgetName = budget.name || "Budget";
+  const subject = `⚠️ Alert: You've used ${percentage}% of your ${budgetName}`;
+  const htmlBody = `
+    <html>
+      <body>
+        <h2>Budget Breach Alert</h2>
+        <p>Hello ${user.name || 'User'},</p>
+        <p>You've spent ₹${totalSpent.toFixed(2)} which is ${percentage}% of your <strong>${budgetName}</strong>.</p>
+        <p>Take action before you overspend further!</p>
+      </body>
+    </html>
+  `;
+  const textBody = `Alert: You've used ${percentage}% of your ${budgetName}. Current spent: ₹${totalSpent.toFixed(2)}.`;
 
-    console.log(`Attempting to send budget alert to ${user.email} for budget "${budgetName}" using hardcoded config...`.blue);
-    await sendEmail({
-        to: user.email,
-        subject,
-        html: htmlBody, // Add your full HTML
-        text: `Budget Alert: ${percentage}% of ${budgetName} spent...`
-    });
+  await sendEmail({
+    to: user.email,
+    subject,
+    text: textBody,
+    html: htmlBody,
+  });
 });
 
 export const sendPasswordResetEmail = asyncHandler(async (user, resetUrl) => {
-    // ... (rest of the function logic as before) ...
-    const subject = 'Password Reset Request for FinTrack Pro';
-    const htmlBody = `...`; // (Keep your HTML body)
-    const textBody = `...`;
+  const subject = `Reset Your Password – FinTrack Pro`;
+  const htmlBody = `
+    <html>
+      <body>
+        <h2>Password Reset Request</h2>
+        <p>Hello ${user.name || 'User'},</p>
+        <p>Click the link below to reset your password:</p>
+        <p><a href="${resetUrl}">${resetUrl}</a></p>
+        <p>If you did not request this, you can ignore this email.</p>
+      </body>
+    </html>
+  `;
+  const textBody = `Reset your password: ${resetUrl}`;
 
-    console.log(`Attempting to send password reset to ${user.email} using hardcoded config...`.blue);
-    await sendEmail({
-        to: user.email,
-        subject,
-        html: htmlBody,
-        text: textBody,
-    });
+  await sendEmail({
+    to: user.email,
+    subject,
+    text: textBody,
+    html: htmlBody,
+  });
 });
-
-
-// Export the generic sendEmail function as default if other parts of your app might use it directly
-// export default sendEmail; // Not strictly needed if only the specific report functions are exported and used.
