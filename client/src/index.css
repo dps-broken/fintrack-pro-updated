@@ -112,13 +112,42 @@ select {
   @apply text-text-light dark:text-text-dark;
 }
 .react-select-container .react-select__option--is-focused {
-  @apply bg-gray-100 dark:bg-gray-700;
+  @apply bg-gray-200 dark:bg-gray-600 text-black dark:text-white;
 }
+
 .react-select-container .react-select__option--is-selected {
   @apply bg-primary-light dark:bg-primary-dark text-white dark:text-card-light;
 }
+
 .react-select-container .react-select__input-container {
   @apply text-text-light dark:text-text-dark;
 }
 
 /* Add any other global styles or overrides here */
+/* Make sure this is loaded after react-select's default styles */
+
+/* Focused option */
+.react-select-container .react-select__option--is-focused {
+  background-color: #e5e7eb !important; /* Tailwind gray-200 */
+  color: #000000 !important;
+}
+
+.dark .react-select-container .react-select__option--is-focused {
+  background-color: #4b5563 !important; /* Tailwind gray-600 */
+  color: #ffffff !important;
+}
+
+/* Selected option */
+.react-select-container .react-select__option--is-selected {
+  background-color: #3b82f6 !important; /* Tailwind primary-light (blue-500) */
+  color: #ffffff !important;
+}
+
+.dark .react-select-container .react-select__option--is-selected {
+  background-color: #2563eb !important; /* Tailwind primary-dark (blue-600) */
+  color: #f9fafb !important; /* Tailwind card-light */
+}
+.react-select__menu-list{
+   /* @apply bg-gray-200 dark:bg-gray-600 text-black dark:text-white !important; */
+   @apply bg-primary-light dark:bg-primary-dark text-white dark:text-card-light !important;
+}
