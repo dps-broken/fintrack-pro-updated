@@ -11,8 +11,8 @@ import colors from 'colors'; // Ensure colors is available if you use .cyan etc.
 // --- Daily Expense Report Job (Runs daily at 12:20 AM server time) ---
 const scheduleDailyReport = () => {
   // Cron expression: 'minute hour day-of-month month day-of-week'
-  // '20 0 * * *' means: at the 20th minute, of the 0th hour (midnight), every day, every month, every day of week.
-  cron.schedule('0 17 * * *', asyncHandler(async () => { // <<<<----- UPDATED SCHEDULE
+  // '20 0 * * *' means: at the 1st minute, of the 0th hour (midnight), every day, every month, every day of week.
+  cron.schedule('1 0 * * *', asyncHandler(async () => { // <<<<----- UPDATED SCHEDULE
     console.log('Running daily expense report job at 12:20 AM...'.cyan);
     const today = new Date(); // This will be the date when the job runs (just after midnight)
                            // So it will correctly pick up expenses for the *previous* full day.
