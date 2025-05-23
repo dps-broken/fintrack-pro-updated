@@ -14,7 +14,7 @@ const TARGET_TIMEZONE = "Asia/Kolkata"; // Define your target timezone
 const scheduleDailyReport = () => {
   // Cron expression: 'minute hour day-of-month month day-of-week'
   // e.g., '13 0 * * *' for 12:13 AM in TARGET_TIMEZONE
-  cron.schedule('35 0 * * *', asyncHandler(async () => {
+  cron.schedule('39 0 * * *', asyncHandler(async () => {
     const jobRunTimeMoment = moment.tz(TARGET_TIMEZONE); // Current time in target timezone when job starts
     console.log(`[CRON START] Daily report job initiated at: ${jobRunTimeMoment.format('YYYY-MM-DD HH:mm:ss Z')} (${TARGET_TIMEZONE})`.cyan);
 
