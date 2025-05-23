@@ -171,7 +171,7 @@ export const sendDailyExpenseReport = asyncHandler(async (user, reportData) => {
         <p>Your total expenditure for the day was <strong class="highlight">₹${totalSpentToday.toFixed(2)}</strong>.</p>
         <div class="table-container"><table class="expenses-table"><thead><tr><th>Category</th><th style="text-align:right;">Amount Spent</th></tr></thead><tbody>${expenseTableRows}</tbody></table></div>
         ${totalSpentToday > 0 ? `<p>Reviewing these details can help you understand your spending habits. 🤔</p>` : ''}
-        <div class="button-container"><a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/dashboard" class="cta-button">View Full Dashboard 🚀</a></div>
+        <div class="button-container"><a href="${'https://officialfintrack.vercel.app/'}" class="cta-button">View Full Dashboard 🚀</a></div>
         <p>Consistent tracking is key to financial well-being. Keep it up!</p>
         <div class="signature-block"><img src="${LOGO_URL_FOR_EMAIL}" alt="FinTrack Pro Logo" class="logo-footer"><p class="signature-text">Best Regards,<br>The ${APP_NAME_STYLED} Team</p></div>
         <p class="unsubscribe-text"><small>Manage email preferences in your ${APP_NAME_STYLED} profile.</small></p>
@@ -204,7 +204,7 @@ export const sendMonthlyOverviewReport = asyncHandler(async (user, reportData) =
         <h2 class="section-title">🏆 Top Spending</h2>
         <div class="table-container"><table class="expenses-table"><thead><tr><th>Category</th><th style="text-align:right;">Amount</th></tr></thead><tbody>${topSpendingHtml}</tbody></table></div>
         ${suggestionsHtmlList ? `<h2 class="section-title">🌟 Suggestions</h2>${suggestionsHtmlList}` : ''}
-        <div class="button-container"><a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/dashboard" class="cta-button">View Dashboard ✨</a></div>
+        <div class="button-container"><a href="${'https://officialfintrack.vercel.app/'}" class="cta-button">View Dashboard ✨</a></div>
         <div class="signature-block"><img src="${LOGO_URL_FOR_EMAIL}" alt="Logo" class="logo-footer"><p class="signature-text">Cheers,<br>The ${APP_NAME_STYLED} Team</p></div>
         <p class="unsubscribe-text"><small>Manage preferences in your ${APP_NAME_STYLED} profile.</small></p>
     </div></div></body></html>`;
@@ -229,7 +229,7 @@ export const sendBudgetBreachAlert = asyncHandler(async (user, budget, totalSpen
         <p>Spent: <strong class="highlight">₹${totalSpent.toFixed(2)}</strong> / Budget: <strong>₹${budget.amount.toFixed(2)}</strong>.</p>
         <p>Usage: <strong>${percentage.toFixed(1)}%</strong> (Period starting ${budgetStartDateFormatted}).</p>
         ${percentage >= 100 ? "<p style='color:red;font-weight:bold;'>🛑 EXCEEDED BUDGET.</p>" : (percentage >= 80 ? "<p style='color:orange;font-weight:bold;'>⚠️ NEARING BUDGET LIMIT.</p>" : "")}
-        <div class="button-container"><a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/budget" class="cta-button">Manage Budgets 🛠️</a></div>
+        <div class="button-container"><a href="${'https://officialfintrack.vercel.app/'}" class="cta-button">Manage Budgets 🛠️</a></div>
         <div class="signature-block"><img src="${LOGO_URL_FOR_EMAIL}" alt="Logo" class="logo-footer"><p class="signature-text">Stay Savvy,<br>The ${APP_NAME_STYLED} Team</p></div>
         <p class="unsubscribe-text"><small>Manage alerts in ${APP_NAME_STYLED}.</small></p>
     </div></div></body></html>`;
