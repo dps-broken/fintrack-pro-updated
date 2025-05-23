@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import apiClient from '../services/apiClient'; // We'll create this next
 import { jwtDecode } from 'jwt-decode'; // To decode for expiry check, not verification
+import apiClient from '../services/apiClient'; // We'll create this next
 
 export const AuthContext = createContext({
   isAuthenticated: false,
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const setAuthData = (userData, authToken) => {
     localStorage.setItem('authToken', authToken);
-    apiClient.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+    apiClient.defaults.headers.common.Authorization = `Bearer ${authToken}`;
     setUser(userData);
     setToken(authToken);
     setIsAuthenticated(true);
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const clearAuthData = useCallback(() => {
     localStorage.removeItem('authToken');
-    delete apiClient.defaults.headers.common['Authorization'];
+    delete apiClient.defaults.headers.common.Authorization;
     setUser(null);
     setToken(null);
     setIsAuthenticated(false);
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
           clearAuthData();
         } else {
           // Token is valid, fetch user data
-          apiClient.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+          apiClient.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
           const response = await apiClient.get('/auth/me');
           setAuthData(response.data, storedToken);
         }
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
   }, [clearAuthData]);
 
   const updateUserContext = (updatedUserData) => {
-    setUser(prevUser => ({ ...prevUser, ...updatedUserData }));
+    setUser((prevUser) => ({ ...prevUser, ...updatedUserData }));
     // If token structure changes (e.g. with new claims), re-issue from backend
     // For now, assume token structure doesn't change with profile update
   };

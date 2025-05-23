@@ -10,7 +10,8 @@ const budgetService = {
     }
   },
 
-  getBudgets: async (filters = {}) => { // e.g., { period, category, active }
+  getBudgets: async (filters = {}) => {
+    // e.g., { period, category, active }
     try {
       const response = await apiClient.get('/budgets', { params: filters });
       return response.data; // Array of budgets, potentially with spending status
@@ -30,10 +31,10 @@ const budgetService = {
 
   getBudgetStatus: async (id) => {
     try {
-        const response = await apiClient.get(`/budgets/${id}/status`);
-        return response.data; // { budgetId, name, amount, totalSpent, progress, remaining }
+      const response = await apiClient.get(`/budgets/${id}/status`);
+      return response.data; // { budgetId, name, amount, totalSpent, progress, remaining }
     } catch (error) {
-        throw error.response ? error.response.data : new Error('Failed to fetch budget status');
+      throw error.response ? error.response.data : new Error('Failed to fetch budget status');
     }
   },
 

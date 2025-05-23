@@ -10,7 +10,8 @@ const categoryService = {
     }
   },
 
-  getCategories: async (type = null) => { // type can be 'income', 'expense', or null for all
+  getCategories: async (type = null) => {
+    // type can be 'income', 'expense', or null for all
     try {
       const params = type ? { type } : {};
       const response = await apiClient.get('/categories', { params });
@@ -25,7 +26,9 @@ const categoryService = {
       const response = await apiClient.get('/categories/predefined');
       return response.data; // Array of predefined categories
     } catch (error) {
-      throw error.response ? error.response.data : new Error('Failed to fetch predefined categories');
+      throw error.response
+        ? error.response.data
+        : new Error('Failed to fetch predefined categories');
     }
   },
 

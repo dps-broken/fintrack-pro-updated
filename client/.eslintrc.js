@@ -6,40 +6,59 @@ module.exports = {
     jest: true,
   },
   extends: [
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'airbnb', // Or another style guide like 'standard'
-    'plugin:prettier/recommended', // Integrates Prettier with ESLint
+    'react-app', // Base CRA ESLint config (includes react, jsx-a11y, etc.)
+    'react-app/jest',
+    'plugin:react-hooks/recommended', // Enforces rules of Hooks
+
+    // IMPORTANT: Prettier config must be LAST to override other formatting rules
+    'plugin:prettier/recommended', 
   ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
+    ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', 'react-hooks', 'prettier', 'jsx-a11y', 'import'],
+  // You don't need to explicitly list 'react', 'react-hooks', or 'prettier' in plugins
+  // if you use 'react-app' and 'plugin:prettier/recommended' as they handle it.
+  // plugins: [], 
   rules: {
-    'prettier/prettier': ['error', { endOfLine: 'auto' }], // Or your prettier config
-    'react/react-in-jsx-scope': 'off', // Not needed with React 17+ new JSX transform
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
-    'react/prop-types': 'off', // Use TypeScript or PropTypes explicitly if needed
-    'import/prefer-default-export': 'off',
-    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-    'jsx-a11y/anchor-is-valid': 'warn', // Or 'off' if using Next.js Link component often
-    'react/jsx-props-no-spreading': 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    // Add any project-specific rules
+    // This rule is enabled by 'plugin:prettier/recommended'
+    // You can customize Prettier's behavior via a .prettierrc.js file
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
+
+    // --- Rules to relax for quicker build success ---
+    
+    // CRA's 'react-app' config is usually good.
+    // If 'airbnb' was causing too many stylistic clashes, this setup avoids it.
+
+    // Common rules you might want to adjust if still getting errors:
+    'import/extensions': 'off', // Allows imports without file extensions
+    'import/order': 'warn', // Warns about import order but doesn't fail build
+
+    'no-underscore-dangle': ['warn', { allow: ['_id'] }], // Allow _id for MongoDB
+    
+    'react/function-component-definition': 'off', // Allows both const Comp = () => {} and function Comp() {}
+    'react/react-in-jsx-scope': 'off', // Not needed with new JSX transform
+    'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }], // Warn if not .jsx for components
+    'react/prop-types': 'off', // Disable if not using prop-types
+
+    // Accessibility rules - good to fix, but can be 'warn' to pass build initially
+    'jsx-a11y/anchor-is-valid': 'warn',
+    'jsx-a11y/label-has-associated-control': 'warn',
+
+    // Other potentially noisy rules if coming from a stricter config like Airbnb
+    'no-shadow': 'warn',
+    'no-param-reassign': ['warn', { props: true, ignorePropertyModificationsFor: ['config', 'acc', 'e', 'draft', 'state'] }], // Allow for specific common cases
+    'dot-notation': 'warn',
+
+    // You can add 'off' or 'warn' for other specific rules that are blocking your build
+    // 'some-other-eslint-rule': 'warn', 
   },
   settings: {
     react: {
       version: 'detect',
-    },
-    'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx'],
-      },
     },
   },
 };

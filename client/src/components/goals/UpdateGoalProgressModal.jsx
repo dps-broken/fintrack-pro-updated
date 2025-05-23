@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { toast } from 'sonner';
+import { BanknotesIcon } from '@heroicons/react/24/outline';
 import Modal from '../common/Modal';
 import Input from '../common/Input';
 import Button from '../common/Button';
-import { toast } from 'sonner';
-import { BanknotesIcon } from '@heroicons/react/24/outline';
 
 const UpdateGoalProgressModal = ({ isOpen, onClose, goal, onProgressUpdate }) => {
   const [currentAmount, setCurrentAmount] = useState(goal?.currentAmount || 0);
@@ -25,11 +25,11 @@ const UpdateGoalProgressModal = ({ isOpen, onClose, goal, onProgressUpdate }) =>
     const newAmount = parseFloat(currentAmount);
 
     if (isNaN(newAmount) || newAmount < 0) {
-      setError("Please enter a valid positive amount.");
+      setError('Please enter a valid positive amount.');
       return;
     }
     if (newAmount > goal.targetAmount) {
-      setError("Current amount cannot exceed target amount. Update target first if needed.");
+      setError('Current amount cannot exceed target amount. Update target first if needed.');
       // Or allow it and let backend/model handle it
     }
 
@@ -47,21 +47,16 @@ const UpdateGoalProgressModal = ({ isOpen, onClose, goal, onProgressUpdate }) =>
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={`Update Progress for "${goal.name}"`}
-      size="md"
-    >
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
+    <Modal isOpen={isOpen} onClose={onClose} title={`Update Progress for "${goal.name}"`} size='md'>
+      <form onSubmit={handleSubmit} className='space-y-4'>
+        <p className='text-sm text-text-muted-light dark:text-text-muted-dark'>
           Target: ₹{goal.targetAmount.toFixed(2)}
         </p>
         <Input
-          id="currentAmountUpdate"
-          name="currentAmountUpdate"
-          type="number"
-          label="Current Amount Saved (₹)"
+          id='currentAmountUpdate'
+          name='currentAmountUpdate'
+          type='number'
+          label='Current Amount Saved (₹)'
           value={currentAmount}
           onChange={(e) => setCurrentAmount(e.target.value)}
           leftIcon={<BanknotesIcon />}
@@ -71,11 +66,11 @@ const UpdateGoalProgressModal = ({ isOpen, onClose, goal, onProgressUpdate }) =>
           autoFocus
         />
         {/* {error && <p className="text-xs text-red-500 dark:text-red-400">{error}</p>} */}
-        <div className="flex justify-end space-x-3 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose} disabled={isLoading}>
+        <div className='flex justify-end space-x-3 pt-2'>
+          <Button type='button' variant='ghost' onClick={onClose} disabled={isLoading}>
             Cancel
           </Button>
-          <Button type="submit" variant="primary" isLoading={isLoading} disabled={isLoading}>
+          <Button type='submit' variant='primary' isLoading={isLoading} disabled={isLoading}>
             Update Progress
           </Button>
         </div>

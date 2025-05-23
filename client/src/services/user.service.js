@@ -43,8 +43,7 @@ const userService = {
     try {
       const response = await apiClient.put('/users/email-preferences', preferences);
       return response.data;
-    } catch (error)
-    {
+    } catch (error) {
       throw error.response ? error.response.data : new Error('Failed to update email preferences');
     }
   },
@@ -56,7 +55,7 @@ const userService = {
     } catch (error) {
       throw error.response ? error.response.data : new Error('Failed to delete account');
     }
-  }
+  },
 };
 
 export default userService;

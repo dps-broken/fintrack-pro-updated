@@ -1,40 +1,36 @@
+// client/src/components/layout/MainLayout.jsx
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom'; // <<--- IMPORT useLocation
+import { motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import { motion } from 'framer-motion'; // For content animation
 
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation(); // <<--- GET location USING THE HOOK
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark">
+    <div className='min-h-screen bg-background-light dark:bg-background-dark'>
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <div className="lg:pl-64 flex flex-col flex-1">
-        <Navbar setSidebarOpen={setSidebarOpen} /> {/* Pass setSidebarOpen to Navbar for mobile toggle */}
-        
-        <main className="flex-1 py-6">
-          <div className="px-4 sm:px-6 lg:px-8">
-            {/* Framer Motion for page content transitions */}
+      <div className='lg:pl-64 flex flex-col flex-1'>
+        <Navbar setSidebarOpen={setSidebarOpen} />
+
+        <main className='flex-1 py-6'>
+          <div className='px-4 sm:px-6 lg:px-8'>
             <motion.div
-              key={location.pathname} // Ensure key changes for AnimatePresence to work
+              key={location.pathname} // Now uses the 'location' from the hook
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
-              <Outlet /> {/* Child routes will render here */}
+              <Outlet />
             </motion.div>
           </div>
         </main>
-        
-        {/* Optional Footer can go here */}
-        {/* <footer className="bg-card-light dark:bg-card-dark border-t border-gray-200 dark:border-gray-700">
-            <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 text-center text-sm text-text-muted-light dark:text-text-muted-dark">
-                © {new Date().getFullYear()} FinTrack Pro. All rights reserved.
-            </div>
-        </footer> */}
+
+        {/* Optional Footer */}
       </div>
     </div>
   );

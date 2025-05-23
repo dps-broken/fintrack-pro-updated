@@ -1,11 +1,11 @@
 import React from 'react';
-import BudgetItem from './BudgetItem';
 import { AnimatePresence, motion } from 'framer-motion';
+import BudgetItem from './BudgetItem';
 
 const BudgetList = ({ budgets, onEdit, onDelete }) => {
   if (!budgets || budgets.length === 0) {
     // This case is handled by the BudgetPage component for a more prominent message
-    return null; 
+    return null;
   }
 
   const containerVariants = {
@@ -19,22 +19,18 @@ const BudgetList = ({ budgets, onEdit, onDelete }) => {
     },
   };
 
-
   return (
-    <motion.div 
-        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+    <motion.div
+      className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
+      variants={containerVariants}
+      initial='hidden'
+      animate='visible'
     >
-      <AnimatePresence> {/* To animate items out when deleted */}
+      <AnimatePresence>
+        {' '}
+        {/* To animate items out when deleted */}
         {budgets.map((budget) => (
-          <BudgetItem
-            key={budget._id}
-            budget={budget}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
+          <BudgetItem key={budget._id} budget={budget} onEdit={onEdit} onDelete={onDelete} />
         ))}
       </AnimatePresence>
     </motion.div>

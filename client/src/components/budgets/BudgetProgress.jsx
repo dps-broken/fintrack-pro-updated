@@ -12,19 +12,18 @@ const BudgetProgress = ({ current, total, height = 'h-2.5', showPercentage = tru
   }
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <div className={`w-full bg-gray-200 dark:bg-gray-700 rounded-full ${height} overflow-hidden`}>
         <motion.div
           className={`${barColorClass} ${height} rounded-full`}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
         />
       </div>
       {showPercentage && (
-        <p className="text-xs text-right text-text-muted-light dark:text-text-muted-dark mt-1">
-          {percentage.toFixed(1)}% spent
-          (₹{current.toFixed(2)} / ₹{total.toFixed(2)})
+        <p className='text-xs text-right text-text-muted-light dark:text-text-muted-dark mt-1'>
+          {percentage.toFixed(1)}% spent (₹{current.toFixed(2)} / ₹{total.toFixed(2)})
         </p>
       )}
     </div>

@@ -2,12 +2,12 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { AuthContext } from '../contexts/AuthContext';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
 import { toast } from 'sonner';
 import { UserIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
+import { AuthContext } from '../contexts/AuthContext';
+import Input from '../components/common/Input';
+import Button from '../components/common/Button';
 
 const SignupPage = () => {
   const { signup } = useContext(AuthContext);
@@ -38,9 +38,10 @@ const SignupPage = () => {
         toast.success('Account created successfully! Welcome!');
         navigate('/dashboard'); // Or to a welcome/onboarding page
       } catch (error) {
-        const errorMessage = error.errors && error.errors.length > 0 
-                           ? error.errors.map(e => e.msg || e.message).join(', ')
-                           : error.message || 'Signup failed. Please try again.';
+        const errorMessage =
+          error.errors && error.errors.length > 0
+            ? error.errors.map((e) => e.msg || e.message).join(', ')
+            : error.message || 'Signup failed. Please try again.';
         toast.error(errorMessage);
         setIsLoading(false);
       }
@@ -49,18 +50,18 @@ const SignupPage = () => {
 
   return (
     <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
     >
-      <form onSubmit={formik.handleSubmit} className="space-y-6">
+      <form onSubmit={formik.handleSubmit} className='space-y-6'>
         <Input
-          id="name"
-          name="name"
-          type="text"
-          label="Full Name"
-          placeholder="John Doe"
+          id='name'
+          name='name'
+          type='text'
+          label='Full Name'
+          placeholder='John Doe'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.name}
@@ -71,11 +72,11 @@ const SignupPage = () => {
         />
 
         <Input
-          id="email"
-          name="email"
-          type="email"
-          label="Email address"
-          placeholder="you@example.com"
+          id='email'
+          name='email'
+          type='email'
+          label='Email address'
+          placeholder='you@example.com'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.email}
@@ -86,11 +87,11 @@ const SignupPage = () => {
         />
 
         <Input
-          id="password"
-          name="password"
-          type="password"
-          label="Password"
-          placeholder="••••••••"
+          id='password'
+          name='password'
+          type='password'
+          label='Password'
+          placeholder='••••••••'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.password}
@@ -101,11 +102,11 @@ const SignupPage = () => {
         />
 
         <Input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          label="Confirm Password"
-          placeholder="••••••••"
+          id='confirmPassword'
+          name='confirmPassword'
+          type='password'
+          label='Confirm Password'
+          placeholder='••••••••'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.confirmPassword}
@@ -116,15 +117,24 @@ const SignupPage = () => {
         />
 
         <div>
-          <Button type="submit" variant="primary" fullWidth isLoading={isLoading} disabled={isLoading}>
+          <Button
+            type='submit'
+            variant='primary'
+            fullWidth
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
             {isLoading ? 'Creating account...' : 'Create Account'}
           </Button>
         </div>
       </form>
 
-      <p className="mt-8 text-center text-sm text-text-muted-light dark:text-text-muted-dark">
+      <p className='mt-8 text-center text-sm text-text-muted-light dark:text-text-muted-dark'>
         Already have an account?{' '}
-        <Link to="/login" className="font-medium text-primary-light hover:text-opacity-80 dark:text-primary-dark dark:hover:text-opacity-80">
+        <Link
+          to='/login'
+          className='font-medium text-primary-light hover:text-opacity-80 dark:text-primary-dark dark:hover:text-opacity-80'
+        >
           Sign in
         </Link>
       </p>

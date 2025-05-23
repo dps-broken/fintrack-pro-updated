@@ -42,7 +42,6 @@ import '@testing-library/jest-dom';
 //   disconnect() {}
 // };
 
-
 // Example: Mock window.matchMedia (useful for testing responsive components or theme switching)
 // Object.defineProperty(window, 'matchMedia', {
 //   writable: true,
@@ -57,7 +56,6 @@ import '@testing-library/jest-dom';
 //     dispatchEvent: jest.fn(),
 //   })),
 // });
-
 
 // Suppress console.error for specific expected errors during tests (use with caution)
 // let originalError;

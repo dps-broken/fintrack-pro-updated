@@ -23,12 +23,10 @@ const Button = ({
       'bg-primary-light text-white hover:bg-opacity-90 dark:bg-primary-dark dark:text-background-dark dark:hover:bg-opacity-90 focus:ring-primary-light dark:focus:ring-primary-dark',
     secondary:
       'bg-secondary-light text-white hover:bg-opacity-90 dark:bg-secondary-dark dark:text-background-dark dark:hover:bg-opacity-90 focus:ring-secondary-light dark:focus:ring-secondary-dark',
-    danger:
-      'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
     ghost:
       'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-primary-light dark:text-primary-dark border border-transparent focus:ring-primary-light dark:focus:ring-primary-dark',
-    link:
-      'bg-transparent text-primary-light dark:text-primary-dark hover:underline p-0 focus:ring-0',
+    link: 'bg-transparent text-primary-light dark:text-primary-dark hover:underline p-0 focus:ring-0',
   };
 
   const sizeStyles = {
@@ -45,8 +43,8 @@ const Button = ({
 
   return (
     <motion.button
-      whileHover={{ scale: (disabled || isLoading || variant === 'link') ? 1 : 1.03 }}
-      whileTap={{ scale: (disabled || isLoading || variant === 'link') ? 1 : 0.97 }}
+      whileHover={{ scale: disabled || isLoading || variant === 'link' ? 1 : 1.03 }}
+      whileTap={{ scale: disabled || isLoading || variant === 'link' ? 1 : 0.97 }}
       type={type}
       onClick={onClick}
       disabled={disabled || isLoading}
@@ -56,22 +54,22 @@ const Button = ({
       {isLoading && (
         <svg
           className={`animate-spin -ml-1 mr-3 ${iconSize} text-white`} // Adjust color if needed for variant
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
+          xmlns='http://www.w3.org/2000/svg'
+          fill='none'
+          viewBox='0 0 24 24'
         >
           <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
+            className='opacity-25'
+            cx='12'
+            cy='12'
+            r='10'
+            stroke='currentColor'
+            strokeWidth='4'
           ></circle>
           <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            className='opacity-75'
+            fill='currentColor'
+            d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
           ></path>
         </svg>
       )}

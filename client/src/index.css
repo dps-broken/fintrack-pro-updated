@@ -27,7 +27,6 @@ body {
   @apply bg-gray-500 dark:bg-gray-400;
 }
 
-
 /* Chart.js tooltip custom styling (example) */
 .chartjs-tooltip {
   @apply bg-card-light dark:bg-card-dark shadow-lg rounded-md p-2 text-xs opacity-90;
@@ -47,22 +46,26 @@ body {
 .react-datepicker__header {
   @apply bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600;
 }
-.react-datepicker__current-month, .react-datepicker-time__header, .react-datepicker-year-header {
-   @apply text-text-light dark:text-text-dark;
-}
-.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name {
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
   @apply text-text-light dark:text-text-dark;
 }
-.react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  @apply text-text-light dark:text-text-dark;
+}
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
   @apply bg-primary-light dark:bg-primary-dark text-white dark:text-black;
 }
 .react-datepicker__day:hover {
   @apply bg-gray-200 dark:bg-gray-600 rounded-full;
 }
 .react-datepicker__navigation-icon::before {
-    @apply border-gray-600 dark:border-gray-400;
+  @apply border-gray-600 dark:border-gray-400;
 }
-
 
 /* Sonner Toasts (if using Sonner) */
 /* [data-sonner-toast][data-type="success"] {
@@ -86,7 +89,9 @@ select {
   placeholder-gray-400 dark:placeholder-gray-500
   focus:outline-none focus:ring-primary-light dark:focus:ring-primary-dark focus:border-primary-light dark:focus:border-primary-dark
   sm:text-sm;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 /* Style for react-select */
@@ -113,7 +118,7 @@ select {
   @apply bg-primary-light dark:bg-primary-dark text-white dark:text-card-light;
 }
 .react-select-container .react-select__input-container {
-    @apply text-text-light dark:text-text-dark;
+  @apply text-text-light dark:text-text-dark;
 }
 
 /* Add any other global styles or overrides here */

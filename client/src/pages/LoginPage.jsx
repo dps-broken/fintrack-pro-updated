@@ -2,12 +2,12 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { AuthContext } from '../contexts/AuthContext';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
 import { toast } from 'sonner'; // Or your chosen toast library
 import { ArrowPathIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
+import { AuthContext } from '../contexts/AuthContext';
+import Input from '../components/common/Input';
+import Button from '../components/common/Button';
 
 const LoginPage = () => {
   const { login } = useContext(AuthContext);
@@ -33,9 +33,10 @@ const LoginPage = () => {
         toast.success('Logged in successfully!');
         navigate(from, { replace: true });
       } catch (error) {
-        const errorMessage = error.errors && error.errors.length > 0 
-                           ? error.errors.map(e => e.msg || e.message).join(', ')
-                           : error.message || 'Login failed. Please check your credentials.';
+        const errorMessage =
+          error.errors && error.errors.length > 0
+            ? error.errors.map((e) => e.msg || e.message).join(', ')
+            : error.message || 'Login failed. Please check your credentials.';
         toast.error(errorMessage);
         setIsLoading(false);
       }
@@ -44,18 +45,18 @@ const LoginPage = () => {
 
   return (
     <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
     >
-      <form onSubmit={formik.handleSubmit} className="space-y-6">
+      <form onSubmit={formik.handleSubmit} className='space-y-6'>
         <Input
-          id="email"
-          name="email"
-          type="email"
-          label="Email address"
-          placeholder="you@example.com"
+          id='email'
+          name='email'
+          type='email'
+          label='Email address'
+          placeholder='you@example.com'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.email}
@@ -66,11 +67,11 @@ const LoginPage = () => {
         />
 
         <Input
-          id="password"
-          name="password"
-          type="password"
-          label="Password"
-          placeholder="••••••••"
+          id='password'
+          name='password'
+          type='password'
+          label='Password'
+          placeholder='••••••••'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.password}
@@ -80,8 +81,8 @@ const LoginPage = () => {
           disabled={isLoading}
         />
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center'>
             {/* <input
               id="remember-me"
               name="remember-me"
@@ -93,9 +94,10 @@ const LoginPage = () => {
             </label> */}
           </div>
 
-          <div className="text-sm">
-            <Link to="/forgot-password" // TODO: Implement forgot password page
-                className="font-medium text-primary-light hover:text-opacity-80 dark:text-primary-dark dark:hover:text-opacity-80"
+          <div className='text-sm'>
+            <Link
+              to='/forgot-password' // TODO: Implement forgot password page
+              className='font-medium text-primary-light hover:text-opacity-80 dark:text-primary-dark dark:hover:text-opacity-80'
             >
               Forgot your password?
             </Link>
@@ -103,15 +105,24 @@ const LoginPage = () => {
         </div>
 
         <div>
-          <Button type="submit" variant="primary" fullWidth isLoading={isLoading} disabled={isLoading}>
+          <Button
+            type='submit'
+            variant='primary'
+            fullWidth
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
             {isLoading ? 'Signing in...' : 'Sign in'}
           </Button>
         </div>
       </form>
 
-      <p className="mt-8 text-center text-sm text-text-muted-light dark:text-text-muted-dark">
+      <p className='mt-8 text-center text-sm text-text-muted-light dark:text-text-muted-dark'>
         Not a member?{' '}
-        <Link to="/signup" className="font-medium text-primary-light hover:text-opacity-80 dark:text-primary-dark dark:hover:text-opacity-80">
+        <Link
+          to='/signup'
+          className='font-medium text-primary-light hover:text-opacity-80 dark:text-primary-dark dark:hover:text-opacity-80'
+        >
           Sign up now
         </Link>
       </p>

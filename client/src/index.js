@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css'; // Tailwind and global styles
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Toaster } from 'sonner'; // Or your chosen toast provider
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { Toaster } from 'sonner'; // Or your chosen toast provider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,7 +15,7 @@ root.render(
       <ThemeProvider>
         <AuthProvider>
           <App />
-          <Toaster position="top-right" richColors closeButton />
+          <Toaster position='top-right' richColors closeButton />
         </AuthProvider>
       </ThemeProvider>
     </Router>

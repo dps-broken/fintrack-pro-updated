@@ -12,10 +12,10 @@ const GoalProgressCircular = ({ percentage, text, strokeWidth = 8, achieved = fa
 
   // These are approximations. Better to use CSS variables set by ThemeContext
   const isDark = document.documentElement.classList.contains('dark');
-  
+
   if (isDark) {
-      pathColor = 'rgb(56, 189, 248)'; // primary-dark
-      textColor = '#e2e8f0'; // text-dark
+    pathColor = 'rgb(56, 189, 248)'; // primary-dark
+    textColor = '#e2e8f0'; // text-dark
   }
 
   if (achieved) {
@@ -23,7 +23,6 @@ const GoalProgressCircular = ({ percentage, text, strokeWidth = 8, achieved = fa
   } else if (percentage > 85) {
     pathColor = isDark ? 'rgb(250, 204, 21)' : 'rgb(245, 158, 11)'; // yellow-400/500
   }
-
 
   return (
     <motion.div

@@ -10,7 +10,8 @@ const goalService = {
     }
   },
 
-  getGoals: async (filters = {}) => { // e.g., filters = { isAchieved: true/false }
+  getGoals: async (filters = {}) => {
+    // e.g., filters = { isAchieved: true/false }
     try {
       const response = await apiClient.get('/goals', { params: filters });
       return response.data; // Array of goals

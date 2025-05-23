@@ -17,7 +17,7 @@ apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -42,7 +42,7 @@ apiClient.interceptors.response.use(
       // that falls out of the range of 2xx
       if (error.response.status === 401) {
         // Handle 401 Unauthorized (e.g., token expired)
-        console.error("API Client: Unauthorized access - 401. Logging out.");
+        console.error('API Client: Unauthorized access - 401. Logging out.');
         // Option 1: Directly trigger logout (if AuthContext is accessible or via event bus)
         // This is tricky because apiClient shouldn't directly know about AuthContext.
         // One way is to dispatch a custom event that AuthContext listens to.
@@ -58,11 +58,11 @@ apiClient.interceptors.response.use(
         // or the calling component to handle the error and trigger logout.
         // Ensure localStorage token is cleared if it's proven invalid.
         if (originalRequest.url !== '/auth/login' && originalRequest.url !== '/auth/register') {
-             // Don't clear token if the error was on login/register itself
-            localStorage.removeItem('authToken');
-            // TODO: Better way to trigger logout from AuthContext.
-            // A simple way for now, though not ideal, is to reload if not on login page to trigger AuthContext re-check
-            // if (window.location.pathname !== '/login') window.location.reload();
+          // Don't clear token if the error was on login/register itself
+          localStorage.removeItem('authToken');
+          // TODO: Better way to trigger logout from AuthContext.
+          // A simple way for now, though not ideal, is to reload if not on login page to trigger AuthContext re-check
+          // if (window.location.pathname !== '/login') window.location.reload();
         }
       }
       // You can add more global error handling here for other status codes (e.g., 403, 500)

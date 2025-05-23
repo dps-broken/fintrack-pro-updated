@@ -1,15 +1,9 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { Pie, Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels'; // For displaying labels on chart
-import { ThemeContext } from '../../contexts/ThemeContext';
 import { motion } from 'framer-motion';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
@@ -22,12 +16,12 @@ const CategoryPieChart = ({ data, type = 'doughnut', title = 'Spending by Catego
   // [{ categoryName: 'Food', totalSpent: 1500, categoryColor: '#FF6384' (optional) }, ...]
 
   const chartData = {
-    labels: data.map(item => item.categoryName),
+    labels: data.map((item) => item.categoryName),
     datasets: [
       {
         label: 'Amount Spent',
-        data: data.map(item => item.totalSpent),
-        backgroundColor: data.map(item => item.categoryColor || getRandomColor()), // Use provided color or generate
+        data: data.map((item) => item.totalSpent),
+        backgroundColor: data.map((item) => item.categoryColor || getRandomColor()), // Use provided color or generate
         borderColor: actualTheme === 'dark' ? '#334155' : '#ffffff', // card-dark or white for border
         borderWidth: 2,
         hoverOffset: 8,
@@ -47,14 +41,14 @@ const CategoryPieChart = ({ data, type = 'doughnut', title = 'Spending by Catego
     responsive: true,
     maintainAspectRatio: false, // Important for responsiveness in a container
     animation: {
-        duration: 1000, // general animation time
-        easing: 'easeInOutQuart',
-        // onProgress: function(animation) {
-        //     // You can add custom progress effects here
-        // },
-        // onComplete: function(animation) {
-        //     // You can add custom completion effects here
-        // }
+      duration: 1000, // general animation time
+      easing: 'easeInOutQuart',
+      // onProgress: function(animation) {
+      //     // You can add custom progress effects here
+      // },
+      // onComplete: function(animation) {
+      //     // You can add custom completion effects here
+      // }
     },
     plugins: {
       legend: {
@@ -65,7 +59,7 @@ const CategoryPieChart = ({ data, type = 'doughnut', title = 'Spending by Catego
           padding: 20,
           font: {
             size: 12,
-          }
+          },
         },
       },
       title: {
@@ -78,12 +72,13 @@ const CategoryPieChart = ({ data, type = 'doughnut', title = 'Spending by Catego
         },
         padding: {
           top: 10,
-          bottom: type === 'pie' ? 10 : (type === 'doughnut' ? -5 : 10 ) // Doughnut needs less bottom padding if datalabels are inside
-        }
+          bottom: type === 'pie' ? 10 : type === 'doughnut' ? -5 : 10, // Doughnut needs less bottom padding if datalabels are inside
+        },
       },
       tooltip: {
         enabled: true,
-        backgroundColor: actualTheme === 'dark' ? 'rgba(51, 65, 85, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+        backgroundColor:
+          actualTheme === 'dark' ? 'rgba(51, 65, 85, 0.9)' : 'rgba(255, 255, 255, 0.9)',
         titleColor: actualTheme === 'dark' ? '#e2e8f0' : '#34495e',
         bodyColor: actualTheme === 'dark' ? '#cbd5e1' : '#4a5568',
         borderColor: actualTheme === 'dark' ? '#475569' : '#e2e8f0',
@@ -107,16 +102,18 @@ const CategoryPieChart = ({ data, type = 'doughnut', title = 'Spending by Catego
           },
         },
       },
-      datalabels: { // chartjs-plugin-datalabels
+      datalabels: {
+        // chartjs-plugin-datalabels
         display: type === 'doughnut' ? 'auto' : true, // Show labels, 'auto' for doughnut to avoid overlap
-        color: (context) => { // Dynamic color for labels for better contrast
-            const bgColor = context.dataset.backgroundColor[context.dataIndex];
-            // Basic contrast check, can be improved
-            if (!bgColor) return actualTheme === 'dark' ? '#FFF' : '#000';
-            const r = parseInt(bgColor.slice(1, 3), 16);
-            const g = parseInt(bgColor.slice(3, 5), 16);
-            const b = parseInt(bgColor.slice(5, 7), 16);
-            return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#FFFFFF';
+        color: (context) => {
+          // Dynamic color for labels for better contrast
+          const bgColor = context.dataset.backgroundColor[context.dataIndex];
+          // Basic contrast check, can be improved
+          if (!bgColor) return actualTheme === 'dark' ? '#FFF' : '#000';
+          const r = parseInt(bgColor.slice(1, 3), 16);
+          const g = parseInt(bgColor.slice(3, 5), 16);
+          const b = parseInt(bgColor.slice(5, 7), 16);
+          return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? '#000000' : '#FFFFFF';
         },
         formatter: (value, context) => {
           const sum = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
@@ -146,21 +143,22 @@ const CategoryPieChart = ({ data, type = 'doughnut', title = 'Spending by Catego
     };
   }, []);
 
-
   const ChartComponent = type === 'doughnut' ? Doughnut : Pie;
 
   return (
     <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative h-72 sm:h-80 md:h-96" // Set a fixed height for the container
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className='relative h-72 sm:h-80 md:h-96' // Set a fixed height for the container
     >
       {data && data.length > 0 ? (
         <ChartComponent ref={chartRef} data={chartData} options={options} />
       ) : (
-        <div className="flex items-center justify-center h-full">
-          <p className="text-text-muted-light dark:text-text-muted-dark">No data available for this chart.</p>
+        <div className='flex items-center justify-center h-full'>
+          <p className='text-text-muted-light dark:text-text-muted-dark'>
+            No data available for this chart.
+          </p>
         </div>
       )}
     </motion.div>

@@ -24,14 +24,19 @@ const Input = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label htmlFor={id || name} className="block text-sm font-medium text-text-light dark:text-text-dark mb-1">
+        <label
+          htmlFor={id || name}
+          className='block text-sm font-medium text-text-light dark:text-text-dark mb-1'
+        >
           {label}
         </label>
       )}
-      <div className="relative rounded-md shadow-sm">
+      <div className='relative rounded-md shadow-sm'>
         {leftIcon && (
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            {React.cloneElement(leftIcon, { className: `h-5 w-5 ${hasError ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}` })}
+          <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+            {React.cloneElement(leftIcon, {
+              className: `h-5 w-5 ${hasError ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}`,
+            })}
           </div>
         )}
         <input
@@ -52,9 +57,10 @@ const Input = ({
             transition-colors duration-150
             ${leftIcon ? 'pl-10' : ''}
             ${rightIcon ? 'pr-10' : ''}
-            ${hasError
-              ? 'border-red-500 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
-              : 'border-gray-300 dark:border-gray-600 focus:border-primary-light dark:focus:border-primary-dark focus:ring-primary-light dark:focus:ring-primary-dark'
+            ${
+              hasError
+                ? 'border-red-500 dark:border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 dark:border-gray-600 focus:border-primary-light dark:focus:border-primary-dark focus:ring-primary-light dark:focus:ring-primary-dark'
             }
             ${disabled ? 'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-700' : ''}
             ${inputClassName}
@@ -62,8 +68,10 @@ const Input = ({
           {...props}
         />
         {rightIcon && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-             {React.cloneElement(rightIcon, { className: `h-5 w-5 ${hasError ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}` })}
+          <div className='absolute inset-y-0 right-0 flex items-center pr-3'>
+            {React.cloneElement(rightIcon, {
+              className: `h-5 w-5 ${hasError ? 'text-red-500' : 'text-gray-400 dark:text-gray-500'}`,
+            })}
           </div>
         )}
       </div>
@@ -71,7 +79,7 @@ const Input = ({
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-1 text-xs text-red-600 dark:text-red-400"
+          className='mt-1 text-xs text-red-600 dark:text-red-400'
         >
           {error}
         </motion.p>

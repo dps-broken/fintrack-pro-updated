@@ -1,7 +1,8 @@
 import apiClient from './apiClient';
 
 const analyticsService = {
-  getDashboardSummary: async (params = {}) => { // { period, startDate, endDate }
+  getDashboardSummary: async (params = {}) => {
+    // { period, startDate, endDate }
     try {
       const response = await apiClient.get('/analytics/dashboard-summary', { params });
       return response.data; // { totalIncome, totalExpense, currentBalance, period }
@@ -10,7 +11,8 @@ const analyticsService = {
     }
   },
 
-  getCategorySpending: async (params = {}) => { // { period, startDate, endDate, limit }
+  getCategorySpending: async (params = {}) => {
+    // { period, startDate, endDate, limit }
     try {
       const response = await apiClient.get('/analytics/category-spending', { params });
       return response.data; // Array of { categoryName, totalSpent, categoryIcon, categoryColor }
@@ -19,7 +21,8 @@ const analyticsService = {
     }
   },
 
-  getIncomeExpenseTrends: async (params = {}) => { // { type, granularity, period, startDate, endDate }
+  getIncomeExpenseTrends: async (params = {}) => {
+    // { type, granularity, period, startDate, endDate }
     try {
       const response = await apiClient.get('/analytics/trends', { params });
       return response.data; // Array of { date, amount }
@@ -28,7 +31,8 @@ const analyticsService = {
     }
   },
 
-  getSavingsRatio: async (params = {}) => { // { period, startDate, endDate }
+  getSavingsRatio: async (params = {}) => {
+    // { period, startDate, endDate }
     try {
       const response = await apiClient.get('/analytics/savings-ratio', { params });
       return response.data; // { totalIncome, totalExpense, savings, savingsRatio, expenseRatio, period }

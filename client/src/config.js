@@ -20,10 +20,10 @@ export const UI_SETTINGS = {
 
 // Date & Time Formats
 export const DATE_FORMATS = {
-  short: 'MMM d, yyyy',         // e.g., Jan 1, 2023
-  long: 'MMMM d, yyyy',         // e.g., January 1, 2023
+  short: 'MMM d, yyyy', // e.g., Jan 1, 2023
+  long: 'MMMM d, yyyy', // e.g., January 1, 2023
   withTime: 'MMM d, yyyy h:mm a', // e.g., Jan 1, 2023 5:30 PM
-  iso: 'yyyy-MM-dd',            // e.g., 2023-01-01
+  iso: 'yyyy-MM-dd', // e.g., 2023-01-01
 };
 
 // Charting Constants (example)
@@ -34,11 +34,10 @@ export const CHART_DEFAULTS = {
 
 // Default messages or text snippets (can also be in a i18n solution)
 export const MESSAGES = {
-  genericError: "An unexpected error occurred. Please try again later.",
-  networkError: "A network error occurred. Please check your connection.",
-  loading: "Loading...",
+  genericError: 'An unexpected error occurred. Please try again later.',
+  networkError: 'A network error occurred. Please check your connection.',
+  loading: 'Loading...',
 };
-
 
 // Combine all configs into a single export if preferred
 const config = {

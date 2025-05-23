@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
-import Modal from '../common/Modal';
-import GoalForm from './GoalForm';
-import goalService from '../../services/goal.service';
 import { toast } from 'sonner';
+import Modal from '../common/Modal';
+import goalService from '../../services/goal.service';
+import GoalForm from './GoalForm';
 
-const AddEditGoalModal = ({
-  isOpen,
-  onClose,
-  onGoalAdded,
-  onGoalUpdated,
-  goalToEdit = null
-}) => {
+const AddEditGoalModal = ({ isOpen, onClose, onGoalAdded, onGoalUpdated, goalToEdit = null }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (values) => {
     setIsLoading(true);
     const goalData = {
-        ...values,
-        targetAmount: parseFloat(values.targetAmount),
-        currentAmount: parseFloat(values.currentAmount || 0),
-        deadline: values.deadline instanceof Date ? values.deadline.toISOString() : (values.deadline || null), // Ensure null if not set
+      ...values,
+      targetAmount: parseFloat(values.targetAmount),
+      currentAmount: parseFloat(values.currentAmount || 0),
+      deadline:
+        values.deadline instanceof Date ? values.deadline.toISOString() : values.deadline || null, // Ensure null if not set
     };
 
     try {
@@ -34,9 +29,11 @@ const AddEditGoalModal = ({
       }
       onClose();
     } catch (error) {
-      const errorMsg = error.errors ? error.errors.map(e => e.msg || e.message).join(', ') : (error.message || 'An unexpected error occurred.');
+      const errorMsg = error.errors
+        ? error.errors.map((e) => e.msg || e.message).join(', ')
+        : error.message || 'An unexpected error occurred.';
       toast.error(`Error: ${errorMsg}`);
-      console.error("Goal submission error:", error);
+      console.error('Goal submission error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +47,8 @@ const AddEditGoalModal = ({
         deadline: goalToEdit.deadline ? new Date(goalToEdit.deadline) : null,
         description: goalToEdit.description || '',
       }
-    : { // Default for new goal
+    : {
+        // Default for new goal
         name: '',
         targetAmount: '',
         currentAmount: '0',
@@ -63,7 +61,7 @@ const AddEditGoalModal = ({
       isOpen={isOpen}
       onClose={onClose}
       title={goalToEdit ? 'Edit Financial Goal' : 'Set New Financial Goal'}
-      size="lg"
+      size='lg'
     >
       <GoalForm
         onSubmit={handleSubmit}

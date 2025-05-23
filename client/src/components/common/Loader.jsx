@@ -24,12 +24,11 @@ const Loader = ({ size = 'md', color = 'primary', className = '' }) => {
   );
 };
 
-export const PageLoader = ({ text = "Loading..." }) => (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
-        <Loader size="lg" />
-        {text && <p className="mt-4 text-lg font-medium text-text-light dark:text-text-dark">{text}</p>}
-    </div>
+export const PageLoader = ({ text = 'Loading...' }) => (
+  <div className='fixed inset-0 z-50 flex flex-col items-center justify-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm'>
+    <Loader size='lg' />
+    {text && <p className='mt-4 text-lg font-medium text-text-light dark:text-text-dark'>{text}</p>}
+  </div>
 );
-
 
 export default Loader;

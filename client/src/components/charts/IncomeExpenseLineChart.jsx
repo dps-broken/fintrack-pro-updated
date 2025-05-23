@@ -3,7 +3,7 @@ import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale, // For X-axis
-  LinearScale,   // For Y-axis
+  LinearScale, // For Y-axis
   PointElement,
   LineElement,
   Title,
@@ -11,9 +11,9 @@ import {
   Legend,
   Filler, // For area fill
 } from 'chart.js';
-import { ThemeContext } from '../../contexts/ThemeContext';
 import { motion } from 'framer-motion';
 import { parseISO, format } from 'date-fns';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +27,7 @@ ChartJS.register(
 );
 
 const IncomeExpenseLineChart = ({
-  incomeData,  // Array of { date: 'YYYY-MM-DD', amount: number }
+  incomeData, // Array of { date: 'YYYY-MM-DD', amount: number }
   expenseData, // Array of { date: 'YYYY-MM-DD', amount: number }
   title = 'Income vs Expense Trend',
   granularity = 'daily', // 'daily', 'monthly' - for label formatting
@@ -36,13 +36,10 @@ const IncomeExpenseLineChart = ({
   const chartRef = useRef(null);
 
   // Combine all dates from both datasets to create a complete set of labels
-  const allDates = new Set([
-    ...incomeData.map(d => d.date),
-    ...expenseData.map(d => d.date)
-  ]);
+  const allDates = new Set([...incomeData.map((d) => d.date), ...expenseData.map((d) => d.date)]);
   const sortedLabels = Array.from(allDates).sort((a, b) => parseISO(a) - parseISO(b));
 
-  const formattedLabels = sortedLabels.map(dateStr => {
+  const formattedLabels = sortedLabels.map((dateStr) => {
     const dateObj = parseISO(dateStr);
     if (granularity === 'monthly') return format(dateObj, 'MMM yyyy');
     if (granularity === 'yearly') return format(dateObj, 'yyyy');
@@ -51,13 +48,12 @@ const IncomeExpenseLineChart = ({
 
   // Map data to the sorted labels, filling with 0 if no data for a label
   const mapDataToLabels = (data, labels) => {
-    const dataMap = new Map(data.map(d => [d.date, d.amount]));
-    return labels.map(labelDate => dataMap.get(labelDate) || 0);
+    const dataMap = new Map(data.map((d) => [d.date, d.amount]));
+    return labels.map((labelDate) => dataMap.get(labelDate) || 0);
   };
 
   const processedIncomeData = mapDataToLabels(incomeData, sortedLabels);
   const processedExpenseData = mapDataToLabels(expenseData, sortedLabels);
-
 
   const chartData = {
     labels: formattedLabels,
@@ -66,7 +62,8 @@ const IncomeExpenseLineChart = ({
         label: 'Income',
         data: processedIncomeData,
         borderColor: actualTheme === 'dark' ? 'rgb(74, 222, 128)' : 'rgb(34, 197, 94)', // Green
-        backgroundColor: actualTheme === 'dark' ? 'rgba(74, 222, 128, 0.3)' : 'rgba(34, 197, 94, 0.3)',
+        backgroundColor:
+          actualTheme === 'dark' ? 'rgba(74, 222, 128, 0.3)' : 'rgba(34, 197, 94, 0.3)',
         tension: 0.3, // Makes the line curved
         fill: true, // Fill area under line
         pointRadius: 3,
@@ -76,7 +73,8 @@ const IncomeExpenseLineChart = ({
         label: 'Expense',
         data: processedExpenseData,
         borderColor: actualTheme === 'dark' ? 'rgb(248, 113, 113)' : 'rgb(239, 68, 68)', // Red
-        backgroundColor: actualTheme === 'dark' ? 'rgba(248, 113, 113, 0.3)' : 'rgba(239, 68, 68, 0.3)',
+        backgroundColor:
+          actualTheme === 'dark' ? 'rgba(248, 113, 113, 0.3)' : 'rgba(239, 68, 68, 0.3)',
         tension: 0.3,
         fill: true,
         pointRadius: 3,
@@ -89,8 +87,8 @@ const IncomeExpenseLineChart = ({
     responsive: true,
     maintainAspectRatio: false,
     animation: {
-        duration: 1000,
-        easing: 'easeInOutQuart',
+      duration: 1000,
+      easing: 'easeInOutQuart',
     },
     scales: {
       x: {
@@ -138,15 +136,16 @@ const IncomeExpenseLineChart = ({
           weight: 'bold',
         },
         padding: {
-            top: 10,
-            bottom: 20
-        }
+          top: 10,
+          bottom: 20,
+        },
       },
       tooltip: {
         enabled: true,
         mode: 'index', // Show tooltips for all datasets at that index
         intersect: false, // Tooltip will show even if not directly hovering over point
-        backgroundColor: actualTheme === 'dark' ? 'rgba(51, 65, 85, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+        backgroundColor:
+          actualTheme === 'dark' ? 'rgba(51, 65, 85, 0.9)' : 'rgba(255, 255, 255, 0.9)',
         titleColor: actualTheme === 'dark' ? '#e2e8f0' : '#34495e',
         bodyColor: actualTheme === 'dark' ? '#cbd5e1' : '#4a5568',
         borderColor: actualTheme === 'dark' ? '#475569' : '#e2e8f0',
@@ -171,14 +170,15 @@ const IncomeExpenseLineChart = ({
         },
       },
     },
-    interaction: { // For hover effects
-        mode: 'index',
-        intersect: false,
+    interaction: {
+      // For hover effects
+      mode: 'index',
+      intersect: false,
     },
     hover: {
-        mode: 'nearest',
-        intersect: true
-    }
+      mode: 'nearest',
+      intersect: true,
+    },
   };
 
   useEffect(() => {
@@ -192,16 +192,18 @@ const IncomeExpenseLineChart = ({
 
   return (
     <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="relative h-72 sm:h-80 md:h-96" // Set a fixed height for the container
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className='relative h-72 sm:h-80 md:h-96' // Set a fixed height for the container
     >
-      {(incomeData.length > 0 || expenseData.length > 0) ? (
+      {incomeData.length > 0 || expenseData.length > 0 ? (
         <Line ref={chartRef} data={chartData} options={options} />
       ) : (
-        <div className="flex items-center justify-center h-full">
-            <p className="text-text-muted-light dark:text-text-muted-dark">No trend data available.</p>
+        <div className='flex items-center justify-center h-full'>
+          <p className='text-text-muted-light dark:text-text-muted-dark'>
+            No trend data available.
+          </p>
         </div>
       )}
     </motion.div>

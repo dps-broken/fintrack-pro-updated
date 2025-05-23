@@ -22,12 +22,14 @@ export const ThemeProvider = ({ children }) => {
       currentActualTheme = 'light';
     } else if (chosenTheme === 'dark') {
       currentActualTheme = 'dark';
-    } else { // 'system'
+    } else {
+      // 'system'
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const hour = new Date().getHours();
       const isNightTime = hour < 6 || hour >= 18; // 6 PM to 6 AM is night
 
-      if (systemPrefersDark || isNightTime) { // Prioritize system dark, then time
+      if (systemPrefersDark || isNightTime) {
+        // Prioritize system dark, then time
         currentActualTheme = 'dark';
       } else {
         currentActualTheme = 'light';
@@ -40,7 +42,6 @@ export const ThemeProvider = ({ children }) => {
     root.classList.add(currentActualTheme);
     localStorage.setItem('appTheme', chosenTheme); // Store user's choice (light, dark, or system)
   }, []);
-
 
   useEffect(() => {
     applyTheme(theme);
@@ -57,11 +58,13 @@ export const ThemeProvider = ({ children }) => {
     // Interval to check time if theme is 'system' (less critical if system preference is main driver)
     let timeCheckInterval;
     if (theme === 'system') {
-        timeCheckInterval = setInterval(() => {
-            applyTheme('system');
-        }, 60 * 1000 * 5); // Check every 5 minutes
+      timeCheckInterval = setInterval(
+        () => {
+          applyTheme('system');
+        },
+        60 * 1000 * 5
+      ); // Check every 5 minutes
     }
-
 
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
@@ -73,14 +76,14 @@ export const ThemeProvider = ({ children }) => {
     setThemeState(newTheme); // This will trigger the useEffect
   };
 
-  const toggleTheme = () => { // For manual override button
+  const toggleTheme = () => {
+    // For manual override button
     if (actualTheme === 'light') {
       setThemeState('dark'); // Directly set to dark, overrides system/time
     } else {
       setThemeState('light'); // Directly set to light
     }
   };
-
 
   return (
     <ThemeContext.Provider value={{ theme, actualTheme, setTheme, toggleTheme }}>

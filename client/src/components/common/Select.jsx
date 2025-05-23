@@ -3,18 +3,18 @@ import ReactSelect, { components } from 'react-select';
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { motion } from 'framer-motion';
 
-const CustomDropdownIndicator = props => {
+const CustomDropdownIndicator = (props) => {
   return (
     <components.DropdownIndicator {...props}>
-      <ChevronDownIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+      <ChevronDownIcon className='h-5 w-5 text-gray-400 dark:text-gray-500' />
     </components.DropdownIndicator>
   );
 };
 
-const CustomClearIndicator = props => {
+const CustomClearIndicator = (props) => {
   return (
     <components.ClearIndicator {...props}>
-      <XMarkIcon className="h-4 w-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" />
+      <XMarkIcon className='h-4 w-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300' />
     </components.ClearIndicator>
   );
 };
@@ -23,7 +23,7 @@ const Select = ({
   id,
   name,
   options, // Array of { value: any, label: string, ...otherProps }
-  value,   // Selected option object or array of option objects for multi-select
+  value, // Selected option object or array of option objects for multi-select
   onChange, // (selectedOptionOrOptions) => void
   onBlur,
   placeholder = 'Select...',
@@ -45,8 +45,16 @@ const Select = ({
     control: (provided, state) => ({
       ...provided,
       backgroundColor: 'var(--select-bg, transparent)', // Use CSS vars for theme adaptability
-      borderColor: hasError ? 'var(--color-red-500)' : (state.isFocused ? 'var(--color-primary)' : 'var(--color-border)'),
-      boxShadow: state.isFocused ? `0 0 0 1px var(--color-primary)` : (hasError ? `0 0 0 1px var(--color-red-500)` : 'none'),
+      borderColor: hasError
+        ? 'var(--color-red-500)'
+        : state.isFocused
+          ? 'var(--color-primary)'
+          : 'var(--color-border)',
+      boxShadow: state.isFocused
+        ? `0 0 0 1px var(--color-primary)`
+        : hasError
+          ? `0 0 0 1px var(--color-red-500)`
+          : 'none',
       borderRadius: '0.375rem', // rounded-md
       minHeight: '38px',
       '&:hover': {
@@ -99,10 +107,18 @@ const Select = ({
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? 'var(--color-primary)' : state.isFocused ? 'var(--color-bg-hover)' : 'transparent',
+      backgroundColor: state.isSelected
+        ? 'var(--color-primary)'
+        : state.isFocused
+          ? 'var(--color-bg-hover)'
+          : 'transparent',
       color: state.isSelected ? 'var(--color-primary-text-selected)' : 'var(--color-text)',
       '&:active': {
-        backgroundColor: !state.isDisabled ? (state.isSelected ? 'var(--color-primary)' : 'var(--color-bg-active)') : undefined,
+        backgroundColor: !state.isDisabled
+          ? state.isSelected
+            ? 'var(--color-primary)'
+            : 'var(--color-bg-active)'
+          : undefined,
       },
     }),
     // Add more style overrides as needed for indicators, etc.
@@ -130,9 +146,14 @@ const Select = ({
   // In a real app, these CSS variables should be defined in your global CSS and toggled by the 'dark' class on <html>
 
   return (
-    <div className={`w-full ${className}`} /* style={themeVariables} -- this is not how CSS vars are applied to children in JS */ >
+    <div
+      className={`w-full ${className}`} /* style={themeVariables} -- this is not how CSS vars are applied to children in JS */
+    >
       {label && (
-        <label htmlFor={id || name} className="block text-sm font-medium text-text-light dark:text-text-dark mb-1">
+        <label
+          htmlFor={id || name}
+          className='block text-sm font-medium text-text-light dark:text-text-dark mb-1'
+        >
           {label}
         </label>
       )}
@@ -149,9 +170,12 @@ const Select = ({
         isDisabled={isDisabled}
         isLoading={isLoading}
         menuPlacement={menuPlacement}
-        components={{ DropdownIndicator: CustomDropdownIndicator, ClearIndicator: CustomClearIndicator }}
+        components={{
+          DropdownIndicator: CustomDropdownIndicator,
+          ClearIndicator: CustomClearIndicator,
+        }}
         // Use classNamePrefix to target react-select elements with global CSS (from index.css)
-        classNamePrefix="react-select"
+        classNamePrefix='react-select'
         // styles={customStyles} // Use this if you want JS-based styling
         unstyled // Use this if you want to rely purely on classNamePrefix and global CSS for styling
         {...props}
@@ -160,7 +184,7 @@ const Select = ({
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-1 text-xs text-red-600 dark:text-red-400"
+          className='mt-1 text-xs text-red-600 dark:text-red-400'
         >
           {error}
         </motion.p>

@@ -46,24 +46,26 @@ function App() {
   if (isLoadingAuth) {
     // You can return a global loading spinner here
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background-light dark:bg-background-dark">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-light dark:border-primary-dark"></div>
+      <div className='flex items-center justify-center min-h-screen bg-background-light dark:bg-background-dark'>
+        <div className='animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-light dark:border-primary-dark'></div>
       </div>
     );
   }
 
   return (
-    <AnimatePresence mode="wait"> {/* For page transitions */}
+    <AnimatePresence mode='wait'>
+      {' '}
+      {/* For page transitions */}
       <Routes location={location} key={location.pathname}>
         {/* Routes for authenticated users (within MainLayout) */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/transactions" element={<TransactionsPage />} />
-            <Route path="/goals" element={<GoalsPage />} />
-            <Route path="/budget" element={<BudgetPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path='/' element={<DashboardPage />} />
+            <Route path='/dashboard' element={<DashboardPage />} />
+            <Route path='/transactions' element={<TransactionsPage />} />
+            <Route path='/goals' element={<GoalsPage />} />
+            <Route path='/budget' element={<BudgetPage />} />
+            <Route path='/profile' element={<ProfilePage />} />
             {/* Add other protected routes here */}
           </Route>
         </Route>
@@ -71,13 +73,13 @@ function App() {
         {/* Routes for guests (login, signup - within AuthLayout) */}
         <Route element={<GuestRoute />}>
           <Route element={<AuthLayout />}>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/signup' element={<SignupPage />} />
           </Route>
         </Route>
 
         {/* Fallback for Not Found */}
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </AnimatePresence>
   );

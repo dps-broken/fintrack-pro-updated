@@ -35,7 +35,7 @@ const authService = {
       // const response = await apiClient.post('/auth/logout');
       // return response.data;
       // For client-side token removal, this service doesn't do much beyond what AuthContext handles
-      return { message: "Logged out locally. Server logout if applicable." };
+      return { message: 'Logged out locally. Server logout if applicable.' };
     } catch (error) {
       throw error.response ? error.response.data : new Error('Logout failed');
     }

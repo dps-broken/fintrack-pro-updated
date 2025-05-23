@@ -6,7 +6,9 @@
  * @returns {boolean} True if empty, false otherwise.
  */
 export const isEmpty = (value) => {
-  return value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
+  return (
+    value === null || value === undefined || (typeof value === 'string' && value.trim() === '')
+  );
 };
 
 /**
@@ -54,10 +56,9 @@ export const isPositiveNumber = (value) => {
  * @returns {boolean} True if a number, false otherwise.
  */
 export const isNumber = (value) => {
-    const num = parseFloat(value);
-    return !isNaN(num) && isFinite(value); // isFinite checks for Infinity and -Infinity
+  const num = parseFloat(value);
+  return !isNaN(num) && isFinite(value); // isFinite checks for Infinity and -Infinity
 };
-
 
 /**
  * Validates if a string is a valid hex color code.
@@ -76,19 +77,18 @@ export const isValidHexColor = (hexColor) => {
  * @returns {boolean} True if the date is today or in the past, false if in the future or invalid.
  */
 export const isNotFutureDate = (dateInput) => {
-    if (!dateInput) return false;
-    const dateToCheck = new Date(dateInput);
-    if (isNaN(dateToCheck.getTime())) return false; // Invalid date
+  if (!dateInput) return false;
+  const dateToCheck = new Date(dateInput);
+  if (isNaN(dateToCheck.getTime())) return false; // Invalid date
 
-    const today = new Date();
-    // Set time to 00:00:00 for accurate date comparison (ignoring time part for "today")
-    // For checking if it's "not after today", we can compare directly
-    // If we want to allow today, we need to set today's time to end of day or dateToCheck's time to start of day
-    today.setHours(23, 59, 59, 999); // End of today
+  const today = new Date();
+  // Set time to 00:00:00 for accurate date comparison (ignoring time part for "today")
+  // For checking if it's "not after today", we can compare directly
+  // If we want to allow today, we need to set today's time to end of day or dateToCheck's time to start of day
+  today.setHours(23, 59, 59, 999); // End of today
 
-    return dateToCheck <= today;
+  return dateToCheck <= today;
 };
-
 
 /**
  * Validates if an end date is after or the same as a start date.
@@ -97,17 +97,16 @@ export const isNotFutureDate = (dateInput) => {
  * @returns {boolean} True if valid range or if endDate is null, false otherwise.
  */
 export const isValidDateRange = (startDateInput, endDateInput) => {
-    if (!endDateInput) return true; // End date is optional, valid if not provided
-    if (!startDateInput) return false; // If end date is there, start date must be too
+  if (!endDateInput) return true; // End date is optional, valid if not provided
+  if (!startDateInput) return false; // If end date is there, start date must be too
 
-    const startDate = new Date(startDateInput);
-    const endDate = new Date(endDateInput);
+  const startDate = new Date(startDateInput);
+  const endDate = new Date(endDateInput);
 
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return false; // Invalid date(s)
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return false; // Invalid date(s)
 
-    return endDate >= startDate;
+  return endDate >= startDate;
 };
-
 
 // Example of using these in a Yup custom validation:
 /*

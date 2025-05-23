@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import GoalItem from './GoalItem';
 import UpdateGoalProgressModal from './UpdateGoalProgressModal';
-import { AnimatePresence, motion } from 'framer-motion';
 
 const GoalList = ({ goals, onEdit, onDelete, onUpdateProgress }) => {
   const [isUpdateProgressModalOpen, setIsUpdateProgressModalOpen] = useState(false);
@@ -34,19 +34,21 @@ const GoalList = ({ goals, onEdit, onDelete, onUpdateProgress }) => {
   };
 
   // Separate active and achieved goals
-  const activeGoals = goals.filter(g => !g.isAchieved);
-  const achievedGoals = goals.filter(g => g.isAchieved);
+  const activeGoals = goals.filter((g) => !g.isAchieved);
+  const achievedGoals = goals.filter((g) => g.isAchieved);
 
   return (
     <>
       {activeGoals.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold text-text-light dark:text-text-dark mb-4 mt-6">Active Goals</h2>
+          <h2 className='text-xl font-semibold text-text-light dark:text-text-dark mb-4 mt-6'>
+            Active Goals
+          </h2>
           <motion.div
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
             variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            initial='hidden'
+            animate='visible'
           >
             <AnimatePresence>
               {activeGoals.map((goal) => (
@@ -65,14 +67,14 @@ const GoalList = ({ goals, onEdit, onDelete, onUpdateProgress }) => {
 
       {achievedGoals.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold text-text-light dark:text-text-dark mb-4 mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <h2 className='text-xl font-semibold text-text-light dark:text-text-dark mb-4 mt-10 pt-6 border-t border-gray-200 dark:border-gray-700'>
             Achieved Goals
           </h2>
           <motion.div
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
             variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            initial='hidden'
+            animate='visible'
           >
             <AnimatePresence>
               {achievedGoals.map((goal) => (
@@ -88,13 +90,13 @@ const GoalList = ({ goals, onEdit, onDelete, onUpdateProgress }) => {
           </motion.div>
         </>
       )}
-      
+
       {isUpdateProgressModalOpen && selectedGoalForProgress && (
         <UpdateGoalProgressModal
-            isOpen={isUpdateProgressModalOpen}
-            onClose={handleCloseUpdateProgressModal}
-            goal={selectedGoalForProgress}
-            onProgressUpdate={onUpdateProgress} // Passed from GoalsPage
+          isOpen={isUpdateProgressModalOpen}
+          onClose={handleCloseUpdateProgressModal}
+          goal={selectedGoalForProgress}
+          onProgressUpdate={onUpdateProgress} // Passed from GoalsPage
         />
       )}
     </>
