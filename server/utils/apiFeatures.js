@@ -4,6 +4,7 @@ class APIFeatures {
     this.query = query; // Mongoose query object (e.g., Product.find())
     this.queryString = queryString; // req.query object from Express
   }
+  
 
   filter() {
     const queryObj = { ...this.queryString };
