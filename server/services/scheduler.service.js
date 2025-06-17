@@ -12,7 +12,7 @@ const TARGET_TIMEZONE = "Asia/Kolkata";
 
 // --- Daily Expense Report Job ---
 const scheduleDailyReport = () => {
-  cron.schedule('21 27 * * *', asyncHandler(async () => { // Example: 12:13 AM in TARGET_TIMEZONE
+  cron.schedule('31 21 * * *', asyncHandler(async () => { // Example: 12:13 AM in TARGET_TIMEZONE
     const jobRunTimeMoment = moment.tz(TARGET_TIMEZONE);
     console.log(`[CRON START] Daily report job initiated at: ${jobRunTimeMoment.format('YYYY-MM-DD HH:mm:ss Z')} (${TARGET_TIMEZONE})`.cyan);
 
