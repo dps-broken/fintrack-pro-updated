@@ -110,13 +110,13 @@ const DashboardPage = () => {
         <h1 className='text-2xl sm:text-3xl font-semibold text-text-light dark:text-text-dark'>
           Welcome back, {user?.name.split(' ')[0] || 'User'}!
         </h1>
-        <Button
+        {/* <Button
           variant='primary'
           onClick={() => setIsAddTransactionModalOpen(true)}
           leftIcon={<PlusCircleIcon className='h-5 w-5' />}
         >
           Add Transaction
-        </Button>
+        </Button> */}
       </div>
 
       {/* Summary Cards */}

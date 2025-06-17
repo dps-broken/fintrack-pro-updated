@@ -60,7 +60,7 @@ function App() {
         {/* Routes for authenticated users (within MainLayout) */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
-            <Route path='/' element={<DashboardPage />} />
+            <Route path='/' element={<TransactionsPage />} />
             <Route path='/dashboard' element={<DashboardPage />} />
             <Route path='/transactions' element={<TransactionsPage />} />
             <Route path='/goals' element={<GoalsPage />} />
